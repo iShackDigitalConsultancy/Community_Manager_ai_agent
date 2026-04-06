@@ -178,3 +178,92 @@
     }
   }
 }
+
+/* ─── Community Selection Cards ─── */
+.selection-form {
+  animation: fadeUp 0.4s ease-out both;
+}
+
+.community-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  
+  /* Scrollbar styling */
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
+}
+
+.community-card {
+  display: block;
+  user-select: none;
+  
+  .card-content {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    .building-icon {
+      font-size: 1.5rem;
+      width: 40px; height: 40px;
+      background: white;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .details {
+      flex: 1;
+      
+      h4 {
+        font-family: 'DM Sans', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin: 0 0 0.25rem 0;
+      }
+      
+      p {
+        color: #64748b;
+        font-size: 0.85rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        
+        .badge {
+          background: rgba(56, 163, 200, 0.1);
+          color: #38A3C8;
+          padding: 0.15rem 0.5rem;
+          border-radius: 9999px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+  
+  &:hover .card-content {
+    background: white;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  
+  input:checked + .card-content {
+    background: rgba(56, 163, 200, 0.05);
+    border-color: #38A3C8;
+    box-shadow: 0 0 0 4px rgba(56, 163, 200, 0.1);
+  }
+}
+
