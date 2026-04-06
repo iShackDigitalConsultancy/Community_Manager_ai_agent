@@ -5,6 +5,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 import { env } from './config/env';
 import { logger } from './shared/logger';
+import { requestIdMiddleware } from './middleware/request-id.middleware';
 import { authRoutes } from './modules/auth/auth.routes';
 import { adminUsersRoutes } from './modules/admin-users/admin-users.routes';
 import { schemesRoutes } from './modules/schemes/schemes.routes';
@@ -25,7 +26,12 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(morgan('combined', { stream: { write: (message: string) => logger.info(message.trim()) } }));
+app.use(requestIdMiddleware);
+
+morgan.token('req-id', (req) => req.headers['x-request-id'] as string || '-');
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] - [TraceID: :req-id]', { 
+    stream: { write: (message: string) => logger.info(message.trim(), { reqId: message.match(/\[TraceID: (.*?)\]/)?.[1] }) } 
+}));
 
 app.use('/api/v1/admin/auth', authRoutes);
 app.use('/api/v1/admin/users', adminUsersRoutes);
