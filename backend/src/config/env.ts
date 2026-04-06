@@ -11,9 +11,14 @@ const envSchema = z.object({
   
   DATABASE_URL: z.string(),
   
+  // Legacy Local Auth
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRY: z.string().default('24h'),
   JWT_REFRESH_EXPIRY: z.string().default('7d'),
+
+  // Next-Gen SSO Auth Hub
+  OIDC_ISSUER_URI: z.string().url().optional(),
+  OIDC_JWKS_URI: z.string().url().optional(),
   
   ANTHROPIC_API_KEY: z.string().startsWith('sk-ant-'),
   ANTHROPIC_MODEL: z.string().default('claude-sonnet-4-20250514'),

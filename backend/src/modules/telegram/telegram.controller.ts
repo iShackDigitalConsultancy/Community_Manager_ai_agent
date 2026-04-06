@@ -9,7 +9,7 @@ export const telegramController = {
      */
     async handleWebhook(req: Request, res: Response) {
         try {
-            const { schemeId } = req.params;
+            const schemeId = req.params.schemeId as string;
             const payload = req.body;
 
             // Telegram requires a 200 OK immediately to prevent retries
