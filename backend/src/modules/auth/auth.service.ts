@@ -79,7 +79,40 @@ export class AuthService {
             [contactInfo, codeHash, expiresAt.toISOString()]
         );
 
-        console.log(`\n\n=== OTP for ${contactInfo} is: ${otp} ===\n\n`);
+        if (contactInfo.includes('@')) {
+            try {
+                await fetch('https://api.brevo.com/v3/smtp/email', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'api-key': env.BREVO_API_KEY,
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sender: { email: 'noreply@realestatemeta.ai', name: 'Community Manager Portal' },
+                        to: [{ email: contactInfo }],
+                        subject: 'Your Community Login OTP Verification Code',
+                        htmlContent: `
+                        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaeb; border-radius: 8px;">
+                            <h2 style="color: #38A3C8;">Community Portal Access</h2>
+                            <p>You requested a one-time password to access the portal.</p>
+                            <p>Here is your security code:</p>
+                            <h1 style="background: #f8fafc; padding: 15px; text-align: center; border-radius: 6px; letter-spacing: 5px; color: #1e293b;">${otp}</h1>
+                            <p style="color: #64748b; font-size: 13px;">This code expires in 10 minutes. If you did not request this, please ignore this email.</p>
+                        </div>
+                        `
+                    })
+                });
+                console.log(`[Email Sent] OTP via Brevo to ${contactInfo}`);
+            } catch (err) {
+                console.error('[Brevo Error] Failed to send OTP email:', err);
+                throw new Error('Failed to dispatch mail server. Please try again later.');
+            }
+        } else {
+            // SMS fallback/log
+            console.log(`\n\n=== [SMS MOCK] OTP for phone ${contactInfo} is: ${otp} ===\n\n`);
+        }
+
         return { success: true, message: 'OTP sent successfully.' };
     }
 

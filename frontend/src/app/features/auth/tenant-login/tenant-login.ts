@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-tenant-login',
   standalone: true,
@@ -19,7 +21,7 @@ export class TenantLogin {
   successMessage = '';
   loading = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   onRequestOtp(e: Event) {
     if (e) e.preventDefault();
@@ -30,13 +32,17 @@ export class TenantLogin {
     this.http.post<any>('/api/v1/admin/auth/tenant-request-otp', { contactInfo: this.contactInfo })
       .subscribe({
         next: (res) => {
+          console.log('[DEBUG] HttpClient next() fired!', res);
           this.step = 2;
           this.loading = false;
-          this.successMessage = res.message || 'OTP sent successfully. Check the terminal for the code.';
+          this.successMessage = res.message || 'OTP sent successfully.';
+          this.cdr.detectChanges();
         },
         error: (err) => {
+          console.error('[DEBUG] HttpClient error() fired!', err);
           this.errorMessage = err.error?.error || 'Failed to request OTP. Please check your details.';
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
   }
