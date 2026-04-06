@@ -54,6 +54,19 @@ export const authController = {
         }
     },
 
+    async selectTenantUnit(req: Request, res: Response) {
+        try {
+            const { intermediateToken, unitId } = req.body;
+            if (!intermediateToken || !unitId) {
+                return res.status(400).json({ error: 'Token and unit ID are required' });
+            }
+            const result = await authService.selectTenantUnit(intermediateToken, unitId);
+            res.json(result);
+        } catch (error: any) {
+            res.status(401).json({ error: error.message });
+        }
+    },
+
     async refresh(req: Request, res: Response) {
         try {
             const { refreshToken } = req.body;

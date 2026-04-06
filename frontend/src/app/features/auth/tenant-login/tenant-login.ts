@@ -14,12 +14,15 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrl: './tenant-login.scss'
 })
 export class TenantLogin {
-  step: 1 | 2 = 1;
+  step: 1 | 2 | 3 = 1;
   contactInfo = '';
   otp = '';
   errorMessage = '';
   successMessage = '';
   loading = false;
+  
+  availableUnits: any[] = [];
+  intermediateToken = '';
 
   constructor(private router: Router, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
@@ -56,14 +59,44 @@ export class TenantLogin {
     this.http.post<any>('/api/v1/admin/auth/tenant-verify-otp', { contactInfo: this.contactInfo, otp: this.otp })
       .subscribe({
         next: (res) => {
+          if (res.multipleUnits) {
+            this.step = 3;
+            this.availableUnits = res.units;
+            this.intermediateToken = res.intermediateToken;
+            this.successMessage = '';
+            this.loading = false;
+            this.cdr.detectChanges();
+          } else {
+            localStorage.setItem('accessToken', res.accessToken);
+            localStorage.setItem('refreshToken', res.refreshToken);
+            localStorage.setItem('user', JSON.stringify(res.user));
+            this.router.navigate(['/chat']);
+          }
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.error || 'Invalid OTP';
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  onSelectUnit(unitId: string) {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.http.post<any>('/api/v1/admin/auth/tenant-select-unit', { intermediateToken: this.intermediateToken, unitId })
+      .subscribe({
+        next: (res) => {
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
           localStorage.setItem('user', JSON.stringify(res.user));
           this.router.navigate(['/chat']);
         },
         error: (err) => {
-          this.errorMessage = err.error?.error || 'Invalid OTP';
+          this.errorMessage = err.error?.error || 'Failed to select unit. Please restart login.';
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
   }

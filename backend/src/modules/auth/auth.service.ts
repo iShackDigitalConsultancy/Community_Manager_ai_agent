@@ -120,27 +120,31 @@ export class AuthService {
         // --- DEV BYPASS ---
         if (otp === '123456') {
             const result = await pool.query(
-                `SELECT su.id as unit_id, su.scheme_id, su.tenant_name, s.scheme_name 
+                `SELECT su.id as unit_id, su.scheme_id, su.tenant_name, su.unit_number, su.unit_type, s.scheme_name 
                  FROM scheme_units su
                  JOIN schemes s ON su.scheme_id = s.id
-                 WHERE (su.tenant_email = $1 OR su.tenant_phone = $1) AND su.is_active = true
-                 LIMIT 1`,
+                 WHERE (su.tenant_email = $1 OR su.tenant_phone = $1) AND su.is_active = true`,
                 [contactInfo]
             );
             
-            const tenant = result.rows[0];
-            if (!tenant) throw new Error('Tenant record not found.');
+            if (result.rows.length === 0) throw new Error('Tenant record not found.');
 
-            return {
-                ...this.generateTokens(tenant.unit_id, 'tenant', tenant.scheme_id),
-                user: { 
-                    id: tenant.unit_id, 
-                    role: 'tenant', 
-                    fullName: tenant.tenant_name,
-                    schemeId: tenant.scheme_id,
-                    schemeName: tenant.scheme_name
-                }
-            };
+            if (result.rows.length === 1) {
+                const tenant = result.rows[0];
+                return {
+                    ...this.generateTokens(tenant.unit_id, 'tenant', tenant.scheme_id),
+                    user: { 
+                        id: tenant.unit_id, 
+                        role: 'tenant', 
+                        fullName: tenant.tenant_name,
+                        schemeId: tenant.scheme_id,
+                        schemeName: tenant.scheme_name
+                    }
+                };
+            } else {
+                const intermediateToken = jwt.sign({ sub: contactInfo, type: 'intermediate_auth' }, env.JWT_SECRET, { expiresIn: '15m' });
+                return { multipleUnits: true, intermediateToken, units: result.rows };
+            }
         }
         // ------------------
 
@@ -165,28 +169,58 @@ export class AuthService {
         await pool.query('UPDATE tenant_login_otp SET verified = true WHERE id = $1', [otpRecord.id]);
 
         const result = await pool.query(
-            `SELECT su.id as unit_id, su.scheme_id, su.tenant_name, s.scheme_name 
+            `SELECT su.id as unit_id, su.scheme_id, su.tenant_name, su.unit_number, su.unit_type, s.scheme_name 
              FROM scheme_units su
              JOIN schemes s ON su.scheme_id = s.id
-             WHERE (su.tenant_email = $1 OR su.tenant_phone = $1) AND su.is_active = true
-             LIMIT 1`,
+             WHERE (su.tenant_email = $1 OR su.tenant_phone = $1) AND su.is_active = true`,
             [contactInfo]
         );
         
-        const tenant = result.rows[0];
-        if (!tenant) {
-            throw new Error('Tenant record not found.');
+        if (result.rows.length === 0) throw new Error('Tenant record not found.');
+
+        if (result.rows.length === 1) {
+            const tenant = result.rows[0];
+            return {
+                ...this.generateTokens(tenant.unit_id, 'tenant', tenant.scheme_id),
+                user: { 
+                    id: tenant.unit_id, 
+                    role: 'tenant', 
+                    fullName: tenant.tenant_name,
+                    schemeId: tenant.scheme_id,
+                    schemeName: tenant.scheme_name
+                }
+            };
+        } else {
+            const intermediateToken = jwt.sign({ sub: contactInfo, type: 'intermediate_auth' }, env.JWT_SECRET, { expiresIn: '15m' });
+            return { multipleUnits: true, intermediateToken, units: result.rows };
         }
+    }
+
+    async selectTenantUnit(intermediateToken: string, unitId: string) {
+        let decoded;
+        try {
+            decoded = jwt.verify(intermediateToken, env.JWT_SECRET) as { sub: string, type: string };
+            if (decoded.type !== 'intermediate_auth') throw new Error();
+        } catch {
+            throw new Error('Expired or invalid session. Please verify your OTP again.');
+        }
+
+        const contactInfo = decoded.sub;
+        const result = await pool.query(
+            `SELECT su.id as unit_id, su.scheme_id, su.tenant_name, s.scheme_name 
+             FROM scheme_units su
+             JOIN schemes s ON su.scheme_id = s.id
+             WHERE su.id = $1 AND (su.tenant_email = $2 OR su.tenant_phone = $2) AND su.is_active = true
+             LIMIT 1`,
+            [unitId, contactInfo]
+        );
+
+        const tenant = result.rows[0];
+        if (!tenant) throw new Error('Unauthorized unit selection or access revoked.');
 
         return {
             ...this.generateTokens(tenant.unit_id, 'tenant', tenant.scheme_id),
-            user: { 
-                id: tenant.unit_id, 
-                role: 'tenant', 
-                fullName: tenant.tenant_name,
-                schemeId: tenant.scheme_id,
-                schemeName: tenant.scheme_name
-            }
+            user: { id: tenant.unit_id, role: 'tenant', fullName: tenant.tenant_name, schemeId: tenant.scheme_id, schemeName: tenant.scheme_name }
         };
     }
 

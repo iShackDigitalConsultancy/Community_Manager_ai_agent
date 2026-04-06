@@ -7,6 +7,7 @@ router.post('/login', authController.login);
 router.post('/tenant-login', authController.tenantLogin);
 router.post('/tenant-request-otp', authController.requestTenantOtp);
 router.post('/tenant-verify-otp', authController.verifyTenantOtp);
+router.post('/tenant-select-unit', authController.selectTenantUnit);
 router.post('/refresh', authController.refresh);
 router.post('/logout', authController.logout);
 router.post('/forgot-password', authController.forgotPassword);

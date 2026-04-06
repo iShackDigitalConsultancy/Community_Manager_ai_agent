@@ -30,6 +30,19 @@ export class Dashboard implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.schemeId = this.route.snapshot.queryParamMap.get('schemeId');
+    
+    if (!this.schemeId) {
+      try {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          if (user.schemeId) {
+            this.schemeId = user.schemeId;
+          }
+        }
+      } catch(e) {}
+    }
+
     if (!this.schemeId) {
       this.messages.push({ role: 'assistant', content: 'Warning: No Community Scheme selected. Please launch the chat from a specific community dashboard to test the Knowledge Base.' });
     } else {
