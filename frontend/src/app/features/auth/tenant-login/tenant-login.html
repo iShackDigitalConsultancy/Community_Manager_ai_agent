@@ -1,0 +1,56 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C6.48 2 2 6.48 2 12c0 2.22.73 4.26 1.95 5.92L2 22l4.08-1.95C7.74 21.27 9.78 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" fill="currentColor"/>
+        </svg>
+      </div>
+      <h2>Community AI<span> Manager</span></h2>
+    </div>
+    
+    <div class="auth-header">
+      <h3>Resident Access</h3>
+      <p>Log in to access your community assistant</p>
+    </div>
+
+    <!-- Step 1: Request OTP -->
+    <form *ngIf="step === 1" class="auth-form" (submit)="onRequestOtp($event)">
+      <div *ngIf="errorMessage" class="error-message p-3 mb-4 rounded bg-red-50 text-red-600 text-sm border border-red-200">{{ errorMessage }}</div>
+      
+      <div class="form-group">
+        <label>Email or Mobile Number</label>
+        <input type="text" [(ngModel)]="contactInfo" name="contactInfo" class="input-base" placeholder="e.g. resident@example.com or 0821234567" required>
+      </div>
+      
+      <button type="submit" class="btn-primary w-full" [disabled]="loading">
+        {{ loading ? 'Sending...' : 'Send Access Code' }}
+      </button>
+    </form>
+
+    <!-- Step 2: Verify OTP -->
+    <form *ngIf="step === 2" class="auth-form" (submit)="onVerifyOtp($event)">
+      <div *ngIf="successMessage" class="success-message p-3 mb-4 rounded bg-green-50 text-green-700 text-sm border border-green-200">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="error-message p-3 mb-4 rounded bg-red-50 text-red-600 text-sm border border-red-200">{{ errorMessage }}</div>
+      
+      <div class="form-group">
+        <label>Enter 6-digit Code</label>
+        <input type="text" [(ngModel)]="otp" name="otp" class="input-base text-center tracking-widest text-lg font-mono" placeholder="------" maxlength="6" required>
+      </div>
+      
+      <button type="submit" class="btn-primary w-full" [disabled]="loading">
+        {{ loading ? 'Verifying...' : 'Verify & Login' }}
+      </button>
+      
+      <div class="mt-4 text-center">
+        <button type="button" class="text-sm text-gray-500 hover:text-gray-700" (click)="step = 1; errorMessage = ''; successMessage = '';" [disabled]="loading">
+          Use a different number/email
+        </button>
+      </div>
+    </form>
+    
+    <div class="auth-footer">
+      <a routerLink="/admin/login" class="text-link">Manager Portal</a>
+    </div>
+  </div>
+</div>

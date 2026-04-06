@@ -1,0 +1,98 @@
+<div class="dashboard-header flex justify-between items-end">
+  <div class="title-area">
+    <div class="breadcrumbs text-sm text-gray-500 mb-2">
+      <a routerLink="/admin/communities" class="hover:underline">Communities</a> > 
+      <span>Tenants</span>
+    </div>
+    <h1>Residents & Units</h1>
+    <p>Manage the directory for this community to allow conversational AI access.</p>
+  </div>
+  
+  <div class="action-buttons flex gap-3">
+    <!-- File upload input hidden, triggered by label -->
+    <label class="btn-outline cursor-pointer flex items-center" [class.opacity-50]="isUploading">
+      <input type="file" class="hidden" accept=".csv" (change)="onFileSelected($event)" [disabled]="isUploading">
+      <span>{{ isUploading ? 'Uploading...' : '📁 Upload CSV' }}</span>
+    </label>
+    
+    <button class="btn-outline flex items-center" (click)="triggerMdaSync()" [disabled]="isSyncing">
+      <span>{{ isSyncing ? 'Syncing...' : '🔄 Sync PMX/MDA' }}</span>
+    </button>
+    
+    <button class="btn-primary" (click)="openAddModal()">+ Add Unit</button>
+  </div>
+</div>
+
+<div class="units-grid mt-6">
+  <div class="table-container content-card">
+    <div *ngIf="isLoading" class="loading-state">Loading directory...</div>
+    
+    <table class="data-table" *ngIf="!isLoading && units.length > 0">
+      <thead>
+        <tr>
+          <th>Unit Number</th>
+          <th>Type</th>
+          <th>Tenant Name</th>
+          <th>Tenant Contact</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let unit of units">
+          <td class="font-medium">{{ unit.unit_number }}</td>
+          <td>{{ unit.unit_type | titlecase }}</td>
+          <td>{{ unit.tenant_name || '-' }}</td>
+          <td class="text-sm text-gray-600">
+            <div *ngIf="unit.tenant_email">{{ unit.tenant_email }}</div>
+            <div *ngIf="unit.tenant_phone">{{ unit.tenant_phone }}</div>
+            <div *ngIf="!unit.tenant_email && !unit.tenant_phone">-</div>
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <button class="btn-icon hover:bg-red-50 p-1 rounded text-red-500" (click)="deleteUnit(unit.id)" title="Remove">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div *ngIf="!isLoading && units.length === 0" class="empty-state">
+      <div class="empty-icon text-4xl mb-4">🏠</div>
+      <h3>No Units Found</h3>
+      <p>Upload a CSV, sync with your PMS, or add units manually.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Add Unit Modal -->
+<div *ngIf="showAddModal" class="modal-backdrop" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Add New Unit</h2>
+      <button class="close-btn" (click)="closeModal()">×</button>
+    </div>
+    <div class="modal-body form-group">
+      <label>Unit Number *</label>
+      <input type="text" [(ngModel)]="newUnit.unit_number" placeholder="e.g. 101" class="form-input" />
+
+      <label class="mt-4">Type</label>
+      <select [(ngModel)]="newUnit.unit_type" class="form-input">
+        <option value="residential">Residential</option>
+        <option value="commercial">Commercial</option>
+      </select>
+
+      <label class="mt-4">Tenant Name</label>
+      <input type="text" [(ngModel)]="newUnit.tenant_name" placeholder="John Doe" class="form-input" />
+      
+      <label class="mt-4">Tenant Email</label>
+      <input type="email" [(ngModel)]="newUnit.tenant_email" placeholder="john@example.com" class="form-input" />
+      
+      <label class="mt-4">Tenant Phone</label>
+      <input type="tel" [(ngModel)]="newUnit.tenant_phone" placeholder="0820000000" class="form-input" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModal()">Cancel</button>
+      <button class="btn-primary" (click)="saveUnit()" [disabled]="!newUnit.unit_number">Save Unit</button>
+    </div>
+  </div>
+</div>

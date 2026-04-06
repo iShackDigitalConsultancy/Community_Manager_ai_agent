@@ -1,0 +1,57 @@
+<div class="auth-wrapper admin-bg">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="logo-icon admin-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C6.48 2 2 6.48 2 12c0 2.22.73 4.26 1.95 5.92L2 22l4.08-1.95C7.74 21.27 9.78 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" fill="currentColor"/>
+        </svg>
+      </div>
+      <h2>RealEstate Meta<span>.ai</span></h2>
+    </div>
+    
+    <div class="auth-header">
+      <h3>Admin Portal</h3>
+      <p>Super Administrator Access</p>
+    </div>
+
+    <form class="auth-form" (submit)="onLogin($event)">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email" [(ngModel)]="credentials.email" class="input-base" placeholder="admin@realestatemeta.ai" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="relative flex items-center">
+          <input [type]="passwordVisible ? 'text' : 'password'" name="password" [(ngModel)]="credentials.password" class="input-base w-full pr-10" placeholder="••••••••" required>
+          <button type="button" (click)="togglePassword()" class="absolute right-3 text-gray-500 hover:text-gray-700 focus:outline-none">
+            <svg *ngIf="!passwordVisible" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <svg *ngIf="passwordVisible" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+          </button>
+        </div>
+      </div>
+      
+      <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-md">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700 font-medium">
+              {{ errorMessage }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary w-full admin-btn" [disabled]="isLoading">
+        {{ isLoading ? 'Signing In...' : 'Sign In to Dashboard' }}
+      </button>
+    </form>
+    
+    <div class="auth-footer">
+      <a routerLink="/" class="text-link">Return to Tenant Gateway</a>
+    </div>
+  </div>
+</div>

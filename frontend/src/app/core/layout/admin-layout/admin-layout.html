@@ -1,0 +1,49 @@
+<div class="app-layout admin-theme">
+  <aside class="sidebar-container admin-sidebar">
+    <div class="brand">
+      <div class="logo-icon admin-icon">⚙️</div>
+      <div class="brand-text">
+        <h2>Admin Portal</h2>
+        <h3>Super<span>User</span></h3>
+      </div>
+    </div>
+    
+    <nav class="nav-menu">
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="sidebar-link">
+        <span class="icon">📊</span>
+        Control Panel
+      </a>
+      <a routerLink="/admin/knowledge-base" routerLinkActive="active" class="sidebar-link">
+        <span class="icon">📚</span>
+        Knowledge Base
+      </a>
+      <a routerLink="/admin/api-hub" routerLinkActive="active" class="sidebar-link">
+        <span class="icon">🔌</span>
+        API Hub
+      </a>
+      <a routerLink="/admin/companies" routerLinkActive="active" class="sidebar-link">
+        <span class="icon">🏢</span>
+        Companies
+      </a>
+      <a routerLink="/admin/communities" routerLinkActive="active" class="sidebar-link">
+        <span class="icon">🏘️</span>
+        Communities
+      </a>
+    </nav>
+
+    
+    <div class="admin-user-card">
+      <div class="avatar">AD</div>
+      <div class="info">
+        <div class="name">Super Admin</div>
+        <a routerLink="/admin/login" class="logout">Logout</a>
+      </div>
+    </div>
+  </aside>
+  
+  <div class="app-content-wrapper">
+    <main class="app-main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

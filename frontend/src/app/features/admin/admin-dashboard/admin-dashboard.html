@@ -1,0 +1,196 @@
+<div class="dashboard-header">
+  <div class="title-area">
+    <h1>Platform Control Panel</h1>
+    <p>Manage community schemas and tenant synchronization</p>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="content-card status-card">
+    <div class="card-header">
+      <h3>Active Communities</h3>
+      <span class="badge badge-success">Live</span>
+    </div>
+    <div class="stat-value" *ngIf="!isLoadingStats">{{ stats.totalCommunities }}</div>
+    <div class="stat-value animate-pulse" *ngIf="isLoadingStats">--</div>
+    <p class="stat-desc">Imported and Onboarded</p>
+  </div>
+  
+  <div class="content-card status-card">
+    <div class="card-header">
+      <h3>Total Tenants</h3>
+      <span class="badge badge-primary">Synced</span>
+    </div>
+    <div class="stat-value" *ngIf="!isLoadingStats">{{ stats.totalTenants }}</div>
+    <div class="stat-value animate-pulse" *ngIf="isLoadingStats">--</div>
+    <p class="stat-desc">With AI Chat access enabled</p>
+  </div>
+
+  <div class="content-card status-card">
+    <div class="card-header">
+      <h3>Knowledge Bases</h3>
+      <span class="badge badge-warning">Building</span>
+    </div>
+    <div class="stat-value" *ngIf="!isLoadingStats">{{ stats.activeKnowledgeBases }}</div>
+    <div class="stat-value animate-pulse" *ngIf="isLoadingStats">--</div>
+    <p class="stat-desc">Communities with uploaded files</p>
+  </div>
+</div>
+
+@if (stats?.companiesList && stats.companiesList.length > 0 && !isLoadingStats) {
+  <div class="content-card mt-6">
+    <div class="card-header border-b pb-4 mb-4">
+      <div class="flex justify-between items-center w-full">
+        <div>
+           <h3 class="font-bold text-lg text-primary">Company Portfolio Breakdown</h3>
+           <p class="stat-desc mt-1">Click a company to view its assigned communities</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-3">
+      @for (comp of stats.companiesList; track comp.id) {
+        <div class="border rounded-md overflow-hidden bg-white hover:border-gray-300 transition-colors">
+          <!-- Accordion Header -->
+          <div 
+            class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
+            (click)="toggleCompany(comp.id)">
+            <div class="flex items-center gap-3">
+              <div class="text-xl font-bold bg-primary bg-opacity-10 text-primary w-10 h-10 rounded-full flex items-center justify-center">
+                🏢
+              </div>
+              <div>
+                <div class="font-semibold text-gray-800">{{ comp.name }}</div>
+                <div class="text-xs text-secondary mt-1">Operating {{ comp.count }} {{ comp.count === 1 ? 'Community' : 'Communities' }}</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+               <span class="badge badge-success px-3">{{ comp.count }} Connected</span>
+               <span class="text-gray-400 transition-transform duration-200" [class.rotate-180]="expandedCompanyId === comp.id">
+                 ▼
+               </span>
+            </div>
+          </div>
+          
+          <!-- Accordion Body -->
+          @if (expandedCompanyId === comp.id) {
+            <div class="bg-gray-50 border-t p-4 pb-5">
+              @if (comp.communities.length > 0) {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  @for (comm of comp.communities; track comm.id) {
+                    <div class="bg-white border rounded p-3 shadow-sm flex flex-col hover:border-primary transition-colors">
+                       <span class="text-xs font-mono text-secondary mb-1">{{ comm.code }}</span>
+                       <span class="font-medium text-sm text-gray-800">{{ comm.name }}</span>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <div class="text-sm text-secondary italic py-2">
+                  No active communities assigned to this company yet.
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}
+
+@if (stats?.aiAnalytics && !isLoadingStats) {
+  <div class="analytics-panel">
+    <div class="panel-header">
+      <div class="header-text">
+        <h2>AI Agent Performance & ROI</h2>
+        <p>Insights into how Wendy is deflecting inquiries and managing knowledge.</p>
+      </div>
+    </div>
+    
+    <div class="analytics-grid">
+      <!-- Deflection Rate Hero -->
+      <div class="deflection-hero">
+        <div class="rate">{{ stats.aiAnalytics.deflectionRate }}%</div>
+        <div class="label">Deflection Rate</div>
+        <div class="subtext">Based on {{ stats.aiAnalytics.totalQueries }} total resident inquiries this month.</div>
+      </div>
+
+      <!-- Top Insights Table -->
+      <div>
+        <h3 style="font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary);">Top Handled Inquiries</h3>
+        <div class="insights-list">
+          @for (item of stats.aiAnalytics.topInsights; track item.queryType) {
+            <div class="insight-item">
+              <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                <span class="query">{{ item.queryType }}</span>
+                <span class="resolution" [class.resolved]="item.resolution.includes('Auto-resolved') || item.resolution.includes('Logged natively')" [class.escalated]="item.resolution.includes('Escalated')">
+                  ↳ {{ item.resolution }}
+                </span>
+              </div>
+              <span class="count">{{ item.count }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Knowledge Base Trajectory -->
+    <div class="kb-trajectory">
+      <h3>⚠️ Knowledge Base Trajectory & Gaps</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Actionable recommendations based on low-confidence agent responses.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+        @for (gap of stats.aiAnalytics.kbTrajectory; track gap.topic) {
+          <div class="kb-warning">
+            <div class="topic">Topic: {{ gap.topic }}</div>
+            <div class="rec">Action required: {{ gap.recommendation }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<div class="sync-panel content-card mt-6">
+  <div class="panel-header">
+    <div class="header-text">
+      <h2>Tenant & Building Synchronization</h2>
+      <p>Force fetch the latest data from the MDA / SmartBuildingApp API.</p>
+    </div>
+    <button class="btn-primary flex-btn" (click)="triggerSync()" [disabled]="isSyncing">
+      <span class="icon">{{ isSyncing ? '🔄' : '⚡' }}</span>
+      {{ isSyncing ? 'Syncing Data...' : 'Run Manual Sync' }}
+    </button>
+  </div>
+  
+  <div class="sync-status" *ngIf="syncResult">
+    <div class="status-icon" [class.success]="syncResult.success">✓</div>
+    <div class="status-details">
+      <h4>{{ syncResult.message }}</h4>
+      <p>Processed {{ syncResult.syncedBuildings }} buildings and {{ syncResult.syncedTenants }} tenants.</p>
+    </div>
+  </div>
+  
+  <div class="sync-logs mt-4">
+    <h4 class="text-sm font-semibold mb-2 text-secondary">Recent Sync Activity</h4>
+    @if (stats?.recentSyncs && stats.recentSyncs.length > 0) {
+      @for (sync of stats.recentSyncs; track sync.name) {
+        <div class="log-entry">
+          <span class="time">{{ sync.last_synced_at | date:'medium' }}</span>
+          <span class="event">
+            Integration <strong>{{ sync.name }}</strong> finished with status 
+            <span [class.text-green-500]="sync.sync_status === 'success'" [class.text-red-500]="sync.sync_status !== 'success'">
+              {{ sync.sync_status | titlecase }}
+            </span>
+            @if (sync.sync_error) {
+              <span class="text-red-500 ml-1">({{ sync.sync_error }})</span>
+            }
+          </span>
+        </div>
+      }
+    } @else {
+      <div class="log-entry text-secondary">
+        <span class="event">No recent database sync activity.</span>
+      </div>
+    }
+  </div>
+</div>

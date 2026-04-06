@@ -1,0 +1,177 @@
+/* ─── Admin Login — Dark Glass Redesign ───────────────────────── */
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 20%, rgba(30, 79, 122, 0.4) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(15, 29, 45, 0.6) 0%, transparent 55%),
+    linear-gradient(155deg, #060d17 0%, #0f1d2d 60%, #0a1525 100%);
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  &::before {
+    width: 600px; height: 350px;
+    background: radial-gradient(ellipse, rgba(56, 163, 200, 0.08), transparent 70%);
+    top: -50px; right: -100px;
+    animation: float 9s ease-in-out infinite;
+  }
+
+  &::after {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(26, 58, 92, 0.5), transparent 70%);
+    bottom: -100px; left: -80px;
+    animation: float 7s ease-in-out infinite reverse;
+  }
+}
+
+.auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background: rgba(15, 29, 45, 0.85);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-radius: 24px;
+  padding: 2.75rem 2.5rem;
+  border: 1px solid rgba(56, 163, 200, 0.15);
+  box-shadow:
+    0 40px 80px rgba(0,0,0,0.5),
+    0 8px 24px rgba(0,0,0,0.3),
+    0 0 60px rgba(56, 163, 200, 0.05) inset;
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 2.25rem;
+  justify-content: center;
+
+  .logo-icon.admin-icon {
+    width: 44px; height: 44px;
+    background: rgba(56, 163, 200, 0.1);
+    border: 1.5px solid rgba(56, 163, 200, 0.35);
+    color: #38A3C8;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 20px rgba(56, 163, 200, 0.15);
+    svg { width: 24px; height: 24px; }
+  }
+
+  h2 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f0f6ff;
+    letter-spacing: -0.02em;
+    span { color: #38A3C8; }
+  }
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f0f6ff;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    color: #718ba8;
+    font-size: 0.9rem;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #8eaac4;
+  }
+}
+
+.w-full {
+  width: 100%;
+  padding: 0.78rem 1rem;
+  font-size: 0.95rem;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #e8f0f8;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s ease;
+
+  &::placeholder { color: rgba(255,255,255,0.28); }
+
+  &:focus {
+    outline: none;
+    border-color: #38A3C8;
+    background: rgba(56, 163, 200, 0.08);
+    box-shadow: 0 0 0 3px rgba(56, 163, 200, 0.2);
+    color: #f0f6ff;
+  }
+}
+
+.btn-primary.admin-btn.w-full {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #38A3C8 0%, #1A3A5C 100%);
+  box-shadow: 0 4px 20px rgba(56, 163, 200, 0.30);
+  letter-spacing: 0.01em;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(56, 163, 200, 0.45);
+  }
+}
+
+.auth-footer {
+  margin-top: 1.75rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+
+  .text-link {
+    color: #718ba8;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: #5EC2E0;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}

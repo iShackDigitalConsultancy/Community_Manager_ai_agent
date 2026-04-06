@@ -1,0 +1,193 @@
+/* ─── Sidebar — Premium Redesign ──────────────────────────────── */
+
+.sidebar-container {
+  height: 100%;
+  background: var(--bg-sidebar);
+  color: var(--text-sidebar);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle gradient overlay for depth */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      rgba(56, 163, 200, 0.04) 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * { position: relative; z-index: 1; }
+}
+
+.brand {
+  padding: 1.5rem 1.25rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border-bottom: 1px solid var(--border-sidebar);
+  background: rgba(255, 255, 255, 0.02);
+
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, rgba(56, 163, 200, 0.2), rgba(56, 163, 200, 0.08));
+    border: 1px solid rgba(56, 163, 200, 0.25);
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    color: #5EC2E0;
+    box-shadow: 0 0 16px rgba(56, 163, 200, 0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: all var(--t-normal);
+    flex-shrink: 0;
+
+    .brand-svg { width: 24px; height: 24px; }
+
+    &:hover {
+      box-shadow: 0 0 24px rgba(56, 163, 200, 0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+    }
+
+    h3 {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.2;
+      margin-top: 0.15rem;
+
+      span { color: #5EC2E0; font-weight: 600; }
+    }
+  }
+}
+
+.nav-menu {
+  padding: 1.25rem 0.75rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.nav-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+  padding: 0.5rem 0.75rem 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.icon {
+  margin-right: 0.75rem;
+  font-size: 1.15rem;
+  opacity: 0.7;
+  transition: opacity var(--t-fast), transform var(--t-fast);
+  flex-shrink: 0;
+}
+
+.sidebar-link {
+  color: var(--text-sidebar);
+  text-decoration: none;
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  transition: all var(--t-fast);
+  font-weight: 500;
+  font-size: 0.88rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--brand-accent);
+    border-radius: 0 3px 3px 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--t-fast);
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+
+    .icon { opacity: 1; transform: translateX(1px); }
+  }
+
+  &.active {
+    background: var(--bg-sidebar-active);
+    color: #5EC2E0;
+    font-weight: 600;
+
+    &::before { transform: scaleX(1); }
+
+    .icon { opacity: 1; color: #5EC2E0; }
+  }
+}
+
+.settings-link {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-sidebar);
+}
+
+/* User footer card at sidebar bottom */
+.sidebar-user {
+  padding: 0.9rem 1.25rem 1.25rem;
+  border-top: 1px solid var(--border-sidebar);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #38A3C8, #1A3A5C);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .user-info {
+    flex: 1;
+    min-width: 0;
+
+    .user-name {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.38);
+      text-transform: capitalize;
+    }
+  }
+}

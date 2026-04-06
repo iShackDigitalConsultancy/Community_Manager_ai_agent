@@ -1,0 +1,27 @@
+// Placeholder, inherits standard admin styles from global styles
+// We just need a little specific styling if any. 
+
+.dashboard-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.action-buttons {
+  button, label {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    height: 38px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+  
+  h3 {
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+}

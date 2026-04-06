@@ -1,0 +1,98 @@
+<div class="dashboard-header">
+  <div class="title-area">
+    <h1>Communities Management</h1>
+    <p>Manually load and track your active schemes</p>
+  </div>
+  <button class="btn-primary" (click)="openAddModal()">+ Add Community</button>
+</div>
+
+<div class="schemes-grid">
+  <div class="table-container content-card mt-6">
+    @if (isLoading) {
+      <div class="loading-state">Loading communities...</div>
+    } @else if (schemes.length > 0) {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Community Name</th>
+            <th>Managing Company</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (scheme of schemes; track scheme.id) {
+            <tr>
+              <td class="font-medium text-secondary">{{ scheme.scheme_code }}</td>
+              <td class="font-medium">{{ scheme.scheme_name }}</td>
+              <td class="text-sm">{{ scheme.company_name || 'Unassigned' }}</td>
+              <td>{{ scheme.scheme_type | titlecase }}</td>
+              <td>
+                <span class="badge" [class.badge-primary]="scheme.status === 'live'" [class.badge-warning]="scheme.status !== 'live'">
+                  {{ scheme.status | titlecase }}
+                </span>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button class="btn-icon hover:bg-gray-100 p-1 rounded" (click)="openEditModal(scheme)" title="Edit">✏️</button>
+                  <button class="btn-icon hover:bg-blue-50 p-1 rounded text-blue-500" [routerLink]="['/admin/communities', scheme.id, 'tenants']" title="Manage Tenants">🏢</button>
+                  <button class="btn-icon hover:bg-red-50 p-1 rounded text-red-500" (click)="deleteScheme(scheme.id)" title="Delete">🗑️</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-icon">🏘️</div>
+        <h3>No Communities Loaded</h3>
+        <p>Manually add communities to your portfolio to begin onboarding them.</p>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showAddModal) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ isEditing ? 'Edit' : 'Add New' }} Community</h2>
+        <button class="close-btn" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body form-group">
+        <label>Community Name</label>
+        <input type="text" [(ngModel)]="newScheme.name" placeholder="e.g. Sunset Heights" class="form-input" />
+  
+        <label class="mt-4">Community Code</label>
+        <input type="text" [(ngModel)]="newScheme.code" placeholder="e.g. SUN123" class="form-input" />
+        
+        <label class="mt-4">Type</label>
+        <select [(ngModel)]="newScheme.type" class="form-input">
+          <option value="sectional_title">Sectional Title</option>
+          <option value="hoa">HOA</option>
+          <option value="estate">Estate</option>
+          <option value="rental">Rental</option>
+        </select>
+  
+        @if (isSuperAdmin) {
+          <label class="mt-4">Assign to Company</label>
+          <select [(ngModel)]="newScheme.companyId" class="form-input">
+            <option value="" disabled selected>-- Select a company --</option>
+            @for (c of companies; track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        }
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">Cancel</button>
+        <button class="btn-primary" (click)="saveScheme()" [disabled]="!newScheme.name || !newScheme.code || (isSuperAdmin && !newScheme.companyId)">
+          {{ isEditing ? 'Save Changes' : 'Save Community' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,7 @@
+-- MIGRATION: 011_companies_fields.sql
+
+ALTER TABLE companies
+ADD COLUMN IF NOT EXISTS address TEXT,
+ADD COLUMN IF NOT EXISTS email VARCHAR(255),
+ADD COLUMN IF NOT EXISTS contact_number VARCHAR(50),
+ADD COLUMN IF NOT EXISTS main_contact_person VARCHAR(255);

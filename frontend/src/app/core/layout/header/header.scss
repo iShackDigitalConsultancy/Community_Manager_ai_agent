@@ -1,0 +1,149 @@
+/* ─── Header — Premium Redesign ───────────────────────────────── */
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 100%;
+  gap: 1.5rem;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  max-width: 440px;
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .search-input {
+    width: 100%;
+    padding-left: 2.75rem;
+    padding-right: 1rem;
+    height: 40px;
+    background: rgba(241, 245, 249, 0.8);
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-pill);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    transition: all var(--t-fast);
+
+    &::placeholder { color: var(--text-muted); }
+
+    &:focus {
+      outline: none;
+      background: #fff;
+      border-color: var(--brand-light);
+      box-shadow: 0 0 0 3px var(--brand-glow);
+    }
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.notifications {
+  position: relative;
+  cursor: pointer;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: background var(--t-fast);
+
+  &:hover {
+    background: var(--bg-hover);
+    .bell-icon { color: var(--brand-dark); }
+  }
+
+  .bell-icon {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    transition: color var(--t-fast);
+  }
+
+  .badge {
+    position: absolute;
+    top: 6px; right: 6px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    width: 16px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    animation: pulse-ring 2s infinite;
+  }
+}
+
+.avatar-container {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  padding: 0.4rem 0.65rem 0.4rem 0.4rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  transition: all var(--t-fast);
+
+  &:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-brand);
+  }
+
+  .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-light) 100%);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 6px rgba(56, 163, 200, 0.3);
+    flex-shrink: 0;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      font-weight: 600;
+      font-size: 0.84rem;
+      color: var(--text-primary);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .role {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: capitalize;
+    }
+  }
+
+  .chevron {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    margin-left: 0.1rem;
+  }
+}

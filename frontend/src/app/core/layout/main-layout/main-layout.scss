@@ -1,0 +1,33 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-main);
+}
+
+.app-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  z-index: 20;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.app-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.app-header {
+  height: 72px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.app-main-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 2rem;
+}

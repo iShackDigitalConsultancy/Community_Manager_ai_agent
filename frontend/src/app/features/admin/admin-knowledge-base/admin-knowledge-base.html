@@ -1,0 +1,162 @@
+<div class="dashboard-header">
+  <div class="title-area">
+    <h1>Knowledge Base Manager</h1>
+    <p>Upload and manage RAG documents for each community</p>
+  </div>
+</div>
+
+<div class="kb-container">
+  <!-- Left Side: Community List -->
+  <div class="community-list-panel content-card">
+    <div class="panel-header">
+      <h3>Select Community</h3>
+      <div class="search-box">
+        <input type="text" class="input-base" placeholder="Search communities..." [(ngModel)]="searchQuery" (input)="filterCommunities()">
+      </div>
+    </div>
+    
+    <div class="list-group">
+      @if (isLoading) {
+        <div style="padding: 1rem; text-align: center; color: var(--text-muted)">Loading communities...</div>
+      }
+      @for (community of filteredCommunities; track community.id) {
+        <button class="list-item" [class.active]="selectedCommunity?.id === community.id" (click)="selectCommunity(community)">
+          <div class="item-title">{{ community.scheme_name }}</div>
+          <div class="item-meta">
+            @if (community.company_name) {
+              Managed by {{ community.company_name }}
+            } @else {
+              No managing agency
+            }
+          </div>
+        </button>
+      }
+      @if (!isLoading && filteredCommunities.length === 0) {
+        <div style="padding: 1rem; text-align: center; color: var(--text-muted)">No communities found.</div>
+      }
+    </div>
+  </div>
+
+  <!-- Right Side: Managing Selected Community -->
+  <div class="kb-management-panel">
+    @if (selectedCommunity) {
+      <div class="management-header content-card mb-4">
+        <div class="header-info">
+          <h2>{{ selectedCommunity.scheme_name }}</h2>
+          @if (selectedCommunity.company_name) {
+            <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+              Managed by <strong>{{ selectedCommunity.company_name }}</strong>
+            </p>
+          }
+          <div style="margin-top: 0.5rem;">
+            <span class="badge" [class.badge-success]="selectedCommunity.status === 'live'" [class.badge-warning]="selectedCommunity.status !== 'live'">
+              {{ selectedCommunity.status | titlecase }} AI Agent
+            </span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <a [routerLink]="['/chat']" [queryParams]="{ schemeId: selectedCommunity.id }" target="_blank" class="btn-secondary text-primary" style="text-decoration: none;">
+            <span class="icon">💬</span> Test AI Agent
+          </a>
+          <button class="btn-primary" (click)="triggerUpload()">
+            <span class="icon">📁</span> Upload Document
+          </button>
+        </div>
+      </div>
+
+      <div class="documents-grid">
+        @if (documentsLoading) {
+          <div style="grid-column: 1 / -1; padding: 2rem; text-align: center; color: var(--text-muted);">
+            Loading documents...
+          </div>
+        } @else if (documents.length > 0) {
+          @for (doc of documents; track doc.id) {
+            <div class="doc-card content-card">
+              <div class="doc-icon text">📄</div>
+              <div class="doc-info">
+                <h4>{{ doc.title }}</h4>
+                <p>Uploaded {{ doc.created_at | date }} • {{ doc.document_type | titlecase }}</p>
+                <div style="margin-top: 0.5rem">
+                  @if (doc.processing_status === 'processed') {
+                    <span class="badge badge-success">Active in LLM ({{ doc.chunk_count }} chunks)</span>
+                  } @else {
+                    <span class="badge badge-warning">Awaiting AI Processing</span>
+                  }
+                </div>
+              </div>
+              <div class="doc-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="btn-secondary btn-sm" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" (click)="downloadDocument(doc)" [disabled]="downloadingDocId === doc.id">
+                  {{ downloadingDocId === doc.id ? 'Loading...' : 'View Document' }}
+                </button>
+                @if (doc.processing_status !== 'processed') {
+                  <button class="btn-primary btn-sm" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" (click)="processDocument(doc.id)" [disabled]="processingDocId === doc.id">
+                    {{ processingDocId === doc.id ? 'Processing...' : 'Process for AI Agent' }}
+                  </button>
+                }
+                <button class="action-btn text-danger" (click)="deleteDocument(doc.id)" [disabled]="processingDocId === doc.id" title="Delete Document">🗑️</button>
+              </div>
+            </div>
+          }
+        } @else {
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-icon">📄</div>
+            <h3>No Documents Yet</h3>
+            <p>No knowledge base documents have been processed for {{ selectedCommunity.scheme_name }} yet. Click "Upload Document" to begin establishing the LLM context.</p>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-icon">🏘️</div>
+        <h3>Select a Community</h3>
+        <p>Select a community from the sidebar to manage standard operating procedures, conduct rules, and other knowledge documents.</p>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showUploadModal) {
+  <div class="modal-backdrop" (click)="closeUploadModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Upload Document</h2>
+        <button class="close-btn" (click)="closeUploadModal()">×</button>
+      </div>
+      <div class="modal-body form-group">
+        <label>Select File</label>
+        <input type="file" (change)="onFileChange($event)" class="form-input" style="padding: 0.5rem;" accept=".pdf,.txt,.docx,.csv" />
+        
+        <label class="mt-4">Document Title</label>
+        <input type="text" [(ngModel)]="uploadForm.title" placeholder="Document Name" class="form-input" />
+
+        <label class="mt-4">Document Type</label>
+        <select [(ngModel)]="uploadForm.document_type" class="form-input">
+          <option value="general">General</option>
+          <option value="moi">MOI</option>
+          <option value="conduct_rules">Conduct Rules</option>
+          <option value="financials">Financials</option>
+          <option value="minutes">Minutes</option>
+          <option value="insurance">Insurance Policy</option>
+        </select>
+        @if (uploading) {
+          <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+              <span>Uploading document...</span>
+              <span>{{ uploadProgress }}%</span>
+            </div>
+            <div style="width: 100%; height: 6px; background-color: var(--border-color); border-radius: 3px; overflow: hidden;">
+              <div style="height: 100%; background-color: var(--primary-color); transition: width 0.3s ease;" [style.width.%]="uploadProgress"></div>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeUploadModal()" [disabled]="uploading">Cancel</button>
+        <button class="btn-primary" (click)="submitUpload()" [disabled]="!uploadFile || !uploadForm.title || uploading">
+          {{ uploading ? 'Uploading...' : 'Upload Document' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+

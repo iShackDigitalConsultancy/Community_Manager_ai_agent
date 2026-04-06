@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+.DS_Store
+dist/
+build/
+.vercel
+tmp/
+.railway/
+out-tsc/
+coverage/
+.angular/cache/
