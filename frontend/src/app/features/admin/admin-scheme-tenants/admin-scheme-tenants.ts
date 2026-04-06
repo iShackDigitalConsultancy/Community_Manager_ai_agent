@@ -87,14 +87,13 @@ export class AdminSchemeTenants implements OnInit {
 
       this.http.post<any>(`/api/v1/admin/schemes/${this.schemeId}/units/import`, formData).subscribe({
         next: (res) => {
-          alert(`Import complete! Successfully imported ${res.successCount} units. Errors: ${res.errorCount}`);
           this.isUploading = false;
           // Reset file input
           event.target.value = null;
           this.loadUnits();
         },
         error: (err) => {
-          alert('Upload failed: ' + (err.error?.error || err.message));
+          console.error('Upload failed:', err.error?.error || err.message);
           this.isUploading = false;
           event.target.value = null;
         }
