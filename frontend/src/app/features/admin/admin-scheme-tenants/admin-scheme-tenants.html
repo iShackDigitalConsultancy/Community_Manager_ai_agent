@@ -9,21 +9,26 @@
   </div>
   
   <div class="action-buttons flex gap-3">
-    <!-- File upload input hidden, triggered by label -->
     <label class="btn-outline cursor-pointer flex items-center" [class.opacity-50]="isUploading">
       <input type="file" class="hidden" accept=".csv" (change)="onFileSelected($event)" [disabled]="isUploading">
-      <span>{{ isUploading ? 'Uploading...' : '📁 Upload CSV' }}</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+      <span>{{ isUploading ? 'Uploading...' : 'Upload CSV' }}</span>
     </label>
     
     <button class="btn-outline flex items-center" (click)="downloadCsvTemplate()">
-      <span>⬇️ Download Template</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+      <span>Template</span>
     </button>
     
     <button class="btn-outline flex items-center" (click)="triggerMdaSync()" [disabled]="isSyncing">
-      <span>{{ isSyncing ? 'Syncing...' : '🔄 Sync PMX/MDA' }}</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+      <span>{{ isSyncing ? 'Syncing...' : 'Sync MDA' }}</span>
     </button>
     
-    <button class="btn-primary" (click)="openAddModal()">+ Add Unit</button>
+    <button class="btn-primary flex items-center" (click)="openAddModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+      <span>Add Unit</span>
+    </button>
   </div>
 </div>
 
@@ -44,16 +49,20 @@
       <tbody>
         <tr *ngFor="let unit of units">
           <td class="font-medium">{{ unit.unit_number }}</td>
-          <td>{{ unit.unit_type | titlecase }}</td>
+          <td><span class="badge" [ngClass]="'badge-' + unit.unit_type">{{ unit.unit_type | titlecase }}</span></td>
           <td>{{ unit.tenant_name || '-' }}</td>
-          <td class="text-sm text-gray-600">
-            <div *ngIf="unit.tenant_email">{{ unit.tenant_email }}</div>
-            <div *ngIf="unit.tenant_phone">{{ unit.tenant_phone }}</div>
-            <div *ngIf="!unit.tenant_email && !unit.tenant_phone">-</div>
+          <td>
+            <div class="contact-info">
+              <div class="email" *ngIf="unit.tenant_email">{{ unit.tenant_email }}</div>
+              <div class="phone" *ngIf="unit.tenant_phone">{{ unit.tenant_phone }}</div>
+              <div class="phone text-gray-400" *ngIf="!unit.tenant_email && !unit.tenant_phone">No Contact Data</div>
+            </div>
           </td>
           <td>
             <div class="flex gap-2">
-              <button class="btn-icon hover:bg-red-50 p-1 rounded text-red-500" (click)="deleteUnit(unit.id)" title="Remove">🗑️</button>
+              <button class="btn-icon hover:bg-red-50 p-1 rounded text-red-500 transition-colors" (click)="deleteUnit(unit.id)" title="Remove">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              </button>
             </div>
           </td>
         </tr>
@@ -61,9 +70,11 @@
     </table>
     
     <div *ngIf="!isLoading && units.length === 0" class="empty-state">
-      <div class="empty-icon text-4xl mb-4">🏠</div>
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+      </div>
       <h3>No Units Found</h3>
-      <p>Upload a CSV, sync with your PMS, or add units manually.</p>
+      <p>Upload a CSV directory, sync with your PMS, or start adding units manually to grant conversational AI access to residents.</p>
     </div>
   </div>
 </div>
