@@ -8,14 +8,12 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true,
-    "ignoreDeprecations": "6.0"
+    "skipLibCheck": true
   },
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {
-      "module": "CommonJS",
-      "ignoreDeprecations": "6.0"
+      "module": "CommonJS"
     }
   },
   "include": ["src/**/*"]
