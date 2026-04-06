@@ -1,17 +1,27 @@
 <div class="auth-wrapper admin-bg">
-  <div class="auth-card">
-    <div class="brand">
-      <div class="logo-icon admin-icon">
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+  
+  <div class="auth-card glass-panel">
+    <div class="brand-showcase">
+      <div class="logo-morph admin-icon">
         <svg viewBox="0 0 24 24" fill="none">
-          <path d="M12 2C6.48 2 2 6.48 2 12c0 2.22.73 4.26 1.95 5.92L2 22l4.08-1.95C7.74 21.27 9.78 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" fill="currentColor"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12c0 2.22.73 4.26 1.95 5.92L2 22l4.08-1.95C7.74 21.27 9.78 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" fill="url(#adminGradient)"/>
+          <defs>
+            <linearGradient id="adminGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38A3C8" />
+              <stop offset="100%" stop-color="#80X6EE" stop-color="#9C6BFF" />
+            </linearGradient>
+          </defs>
         </svg>
       </div>
-      <h2>RealEstate Meta<span>.ai</span></h2>
+      <h2>Community AI<span class="gradient-text">Manager</span></h2>
     </div>
     
     <div class="auth-header">
-      <h3>Admin Portal</h3>
-      <p>Super Administrator Access</p>
+      <h3>System Portal</h3>
+      <p>Command center authentication</p>
     </div>
 
     <form class="auth-form" (submit)="onLogin($event)">
