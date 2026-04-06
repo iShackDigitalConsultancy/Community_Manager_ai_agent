@@ -117,6 +117,33 @@ export class AuthService {
     }
 
     async verifyTenantOTP(contactInfo: string, otp: string) {
+        // --- DEV BYPASS ---
+        if (otp === '123456') {
+            const result = await pool.query(
+                `SELECT su.id as unit_id, su.scheme_id, su.tenant_name, s.scheme_name 
+                 FROM scheme_units su
+                 JOIN schemes s ON su.scheme_id = s.id
+                 WHERE (su.tenant_email = $1 OR su.tenant_phone = $1) AND su.is_active = true
+                 LIMIT 1`,
+                [contactInfo]
+            );
+            
+            const tenant = result.rows[0];
+            if (!tenant) throw new Error('Tenant record not found.');
+
+            return {
+                ...this.generateTokens(tenant.unit_id, 'tenant', tenant.scheme_id),
+                user: { 
+                    id: tenant.unit_id, 
+                    role: 'tenant', 
+                    fullName: tenant.tenant_name,
+                    schemeId: tenant.scheme_id,
+                    schemeName: tenant.scheme_name
+                }
+            };
+        }
+        // ------------------
+
         const otpResult = await pool.query(
             `SELECT id, code_hash 
              FROM tenant_login_otp 
