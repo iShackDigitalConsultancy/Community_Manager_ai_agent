@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  logto:
+    image: svhd/logto:latest
+    container_name: realestatemeta-auth-hub
+    ports:
+      - "3001:3001" # Core Auth Service (OIDC)
+      - "3002:3002" # Admin Console (Configuration UI)
+    environment:
+      - TRUST_PROXY_HEADER=1 # IMPORTANT: For Nginx/Cloudflare reverse proxy
+      - DB_URL=postgresql://auth_admin:REPLACE_WITH_STRONG_PASSWORD@auth-db:5432/realestatemeta_auth
+      - ENDPOINT=https://auth.realestatemeta.ai
+      - ADMIN_ENDPOINT=https://admin.auth.realestatemeta.ai
+    depends_on:
+      auth-db:
+        condition: service_healthy
+
+  auth-db:
+    image: postgres:14
+    container_name: realestatemeta-auth-db
+    environment:
+      - POSTGRES_USER=auth_admin
+      - POSTGRES_PASSWORD=REPLACE_WITH_STRONG_PASSWORD
+      - POSTGRES_DB=realestatemeta_auth
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_admin -d realestatemeta_auth"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  auth-db-data:
