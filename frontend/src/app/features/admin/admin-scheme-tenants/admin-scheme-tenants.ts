@@ -102,6 +102,21 @@ export class AdminSchemeTenants implements OnInit {
     }
   }
 
+  downloadCsvTemplate() {
+    const csvContent = "Unit Number,Tenant Name,Tenant Email,Contact Number\n101,John Doe,john@example.com,0820000000\n102,Jane Smith,jane@example.com,0831112222";
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'tenant_upload_template.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
   openAddModal() {
     this.newUnit = { unit_type: 'residential' };
     this.showAddModal = true;

@@ -15,6 +15,10 @@
       <span>{{ isUploading ? 'Uploading...' : '📁 Upload CSV' }}</span>
     </label>
     
+    <button class="btn-outline flex items-center" (click)="downloadCsvTemplate()">
+      <span>⬇️ Download Template</span>
+    </button>
+    
     <button class="btn-outline flex items-center" (click)="triggerMdaSync()" [disabled]="isSyncing">
       <span>{{ isSyncing ? 'Syncing...' : '🔄 Sync PMX/MDA' }}</span>
     </button>

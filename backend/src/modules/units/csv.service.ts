@@ -23,7 +23,8 @@ export class CsvService {
                     owner_name: row['Owner Name'] || row['owner_name'],
                     owner_email: row['Owner Email'] || row['owner_email'],
                     tenant_name: row['Tenant Name'] || row['tenant_name'],
-                    tenant_email: row['Tenant Email'] || row['tenant_email']
+                    tenant_email: row['Tenant Email'] || row['tenant_email'],
+                    tenant_phone: row['Contact Number'] || row['tenant_phone']
                 });
                 successCount++;
             } catch (e) {
