@@ -28,10 +28,17 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        // Clear tokens and redirect to login
+        // Clear tokens
         localStorage.removeItem('admin_token');
-        if (router.url.includes('/admin')) {
-           router.navigate(['/admin/login']);
+        localStorage.removeItem('token');
+        
+        // Only redirect to login if we aren't currently trying to login
+        if (!req.url.includes('/auth/login') && !req.url.includes('/auth/tenant-login')) {
+            if (router.url.includes('/admin')) {
+               router.navigate(['/admin/login']);
+            } else {
+               router.navigate(['/']);
+            }
         }
       }
       return throwError(() => error);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ export class AdminLogin {
   errorMessage = '';
   passwordVisible = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   togglePassword() {
     this.passwordVisible = !this.passwordVisible;
@@ -40,6 +40,7 @@ export class AdminLogin {
         this.isLoading = false;
         this.errorMessage = err.error?.error || 'Invalid credentials or inactive account';
         console.error('Login failed', err);
+        this.cdr.detectChanges();
       }
     });
   }
