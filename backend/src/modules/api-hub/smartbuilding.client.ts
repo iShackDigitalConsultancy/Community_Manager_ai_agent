@@ -1,8 +1,10 @@
 import { logger } from '../../shared/logger';
+import { env } from '../../config/env';
 
 const SBA_BASE = 'https://smartbuildingapp.com:8443';
 const TOKEN_URL = `${SBA_BASE}/auth/developer-key/token`;
 const TOKEN_TTL_MS = 55 * 60 * 1000; // 55 min safety margin before 60min expiry
+const INCIDENTS_API_BASE = 'https://api.smartbuildingapp.com';
 
 export interface SBACredentials {
     brandId: string;
@@ -37,16 +39,14 @@ export async function getToken(creds: SBACredentials): Promise<SBATokenResult> {
 
     logger.info('[SmartBuilding] Fetching new access token', { brandId: creds.brandId });
 
+    const authHeader = 'Basic ' + Buffer.from(`${creds.clientId}:${creds.clientSecret}`).toString('base64');
     const res = await fetch(TOKEN_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': authHeader,
             'appid': creds.brandId,
         },
-        body: JSON.stringify({
-            client_id: creds.clientId,
-            client_secret: creds.clientSecret,
-        }),
     });
 
     if (!res.ok) {
@@ -169,16 +169,40 @@ export async function getMdaActiveLeases(
 export async function reportIncident(creds: SBACredentials, payload: {
     category: number; message: string; comID: number; longitude?: number; latitude?: number;
 }) {
-    return sbaRequest(creds, '/api/v1/reportIncident', {
+    const tokenResult = await getToken(creds);
+    const res = await fetch(`${INCIDENTS_API_BASE}/api/v1/reportIncident`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': tokenResult.token,
+            'appid': creds.brandId,
+        },
         body: JSON.stringify(payload),
     });
+
+    if (!res.ok) {
+        throw new Error(`SmartBuilding API error ${res.status} on reportIncident: ${await res.text()}`);
+    }
+
+    return { data: await res.json(), tokenResult };
 }
 
 /** POST /api/v1/getReportTypes */
 export async function getReportTypes(creds: SBACredentials, comID: number) {
-    return sbaRequest(creds, '/api/v1/getReportTypes', {
+    const tokenResult = await getToken(creds);
+    const res = await fetch(`${INCIDENTS_API_BASE}/api/v1/getReportTypes`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': tokenResult.token,
+            'appid': creds.brandId,
+        },
         body: JSON.stringify({ comID }),
     });
+
+    if (!res.ok) {
+        throw new Error(`SmartBuilding API error ${res.status} on getReportTypes: ${await res.text()}`);
+    }
+
+    return { data: await res.json(), tokenResult };
 }

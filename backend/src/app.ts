@@ -17,6 +17,7 @@ import { mdaRoutes } from './modules/mda-integration/mda.routes';
 import { apiHubRoutes } from './modules/api-hub/api-hub.routes';
 import { companiesRoutes } from './modules/companies/companies.routes';
 import { adminDashboardRoutes } from './modules/admin-dashboard/admin-dashboard.routes';
+import { telegramRoutes } from './modules/telegram/telegram.routes';
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use('/api/v1/admin/api-hub', apiHubRoutes);
 app.use('/api/v1/admin/companies', companiesRoutes);
 
 app.use('/api/v1/chat', chatRoutes);
+app.use('/api/v1/telegram', telegramRoutes);
 
 app.get('/api/health', (req: Request, res: Response) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });

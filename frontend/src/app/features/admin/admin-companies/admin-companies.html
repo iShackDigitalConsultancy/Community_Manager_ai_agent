@@ -3,10 +3,16 @@
     <h1>Companies Management</h1>
     <p>Manually load and track property management companies</p>
   </div>
-  <button class="btn-primary" (click)="openAddModal()">+ Add Company</button>
+  <div class="flex gap-4 items-center animate-fade-up" style="animation-delay: 0.1s">
+    <div class="relative">
+      <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" placeholder="Search companies..." class="input-base pl-8 py-2 w-64 text-sm" style="border-radius: var(--radius-pill); box-shadow: var(--shadow-sm);" />
+      <span class="absolute left-3 top-2 text-gray-400">🔍</span>
+    </div>
+    <button class="btn-primary" (click)="openAddModal()">+ Add Company</button>
+  </div>
 </div>
 
-<div class="companies-grid">
+<div class="companies-grid animate-fade-up" style="animation-delay: 0.2s">
 <div class="table-container content-card mt-6">
     @if (isLoading) {
       <div class="loading-state">Loading companies...</div>

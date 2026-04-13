@@ -16,7 +16,7 @@ export const telegramController = {
             res.status(200).send('OK');
 
             // Process message asynchronously
-            await telegramService.handleIncomingMessage(schemeId, payload);
+            await telegramService.handleWebhookUpdate(schemeId, payload);
             
         } catch (error) {
             logger.error('[Telegram] Webhook error', error);

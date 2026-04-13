@@ -127,6 +127,13 @@ export const chatController = {
             const mime = require('mime-types');
             const mimetype = mime.lookup(doc.original_filename) || 'application/octet-stream';
 
+            // Log download
+            pool.query(
+                `INSERT INTO knowledge_document_downloads (document_id, scheme_id)
+                 SELECT id, scheme_id FROM knowledge_documents WHERE id = $1`,
+                [req.params.docId]
+            ).catch(err => logger.error('[Chat] Failed to log document download', err));
+
             res.setHeader('Content-Type', mimetype);
             res.setHeader('Content-Disposition', `inline; filename="${doc.original_filename}"`);
             

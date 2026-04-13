@@ -17,6 +17,9 @@ export class AdminCompanies implements OnInit {
   isEditing = false;
   editingCompanyId: string | null = null;
   
+  searchQuery = '';
+  searchTimeout: any;
+  
   newCompany = { 
     name: '', 
     status: 'active',
@@ -35,7 +38,8 @@ export class AdminCompanies implements OnInit {
   loadCompanies() {
     this.isLoading = true;
     this.cd.detectChanges();
-    this.http.get<any[]>('/api/v1/admin/companies').subscribe({
+    const searchParam = this.searchQuery ? `?search=${encodeURIComponent(this.searchQuery)}` : '';
+    this.http.get<any[]>(`/api/v1/admin/companies${searchParam}`).subscribe({
       next: (data) => {
         this.companies = data;
         this.isLoading = false;
@@ -47,6 +51,15 @@ export class AdminCompanies implements OnInit {
         this.cd.detectChanges();
       }
     });
+  }
+
+  onSearchChange() {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      this.loadCompanies();
+    }, 400);
   }
 
   openAddModal() {

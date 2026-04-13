@@ -45,6 +45,26 @@
     vertical-align: middle;
   }
 
+  tbody tr {
+    transition: all var(--t-fast);
+    
+    &:hover {
+      background: var(--bg-hover);
+      transform: scale(1.005);
+      box-shadow: 0 4px 12px rgba(31, 63, 94, 0.05);
+      position: relative;
+      z-index: 10;
+      border-radius: var(--radius-sm);
+
+      td {
+        border-bottom-color: transparent;
+      }
+      
+      td:first-child { border-top-left-radius: var(--radius-sm); border-bottom-left-radius: var(--radius-sm); }
+      td:last-child { border-top-right-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); }
+    }
+  }
+
   tbody tr:last-child td {
     border-bottom: none;
   }
@@ -67,21 +87,26 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 29, 45, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .modal-content {
-  background: var(--bg-card);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-radius: var(--radius-xl);
   width: 100%;
   max-width: 520px;
   max-height: 90vh;
-  box-shadow: var(--shadow-lg), 0 0 0 1px var(--border-light);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   animation: modalSlideIn var(--t-normal) forwards;
   overflow: hidden;
   display: flex;
@@ -93,8 +118,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border-light);
-  background: var(--bg-main);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.4);
   
   h2 {
     margin: 0;
@@ -159,8 +184,8 @@
   justify-content: flex-end;
   gap: 1rem;
   padding: 1.25rem 2rem;
-  background: var(--bg-main);
-  border-top: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(0,0,0,0.05);
 }
 
 @keyframes modalSlideIn {

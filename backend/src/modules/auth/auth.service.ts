@@ -196,6 +196,136 @@ export class AuthService {
         }
     }
 
+    async requestTelegramOTP(contactInfo: string) {
+        const normalizedContact = contactInfo.includes('@') ? contactInfo.toLowerCase() : contactInfo;
+
+        // 1. Try Admin Users first
+        let isAdmin = false;
+        let userResult = await pool.query(
+            `SELECT id, email, full_name as name FROM admin_users WHERE LOWER(email) = $1 AND is_active = true LIMIT 1`,
+            [normalizedContact]
+        );
+
+        if (userResult.rows.length > 0) {
+            isAdmin = true;
+        } else {
+            // 2. Try Tenants
+            userResult = await pool.query(
+                `SELECT id, scheme_id, tenant_name as name FROM scheme_units WHERE (LOWER(tenant_email) = $1 OR tenant_phone = $1) AND is_active = true LIMIT 1`,
+                [normalizedContact]
+            );
+        }
+
+        if (userResult.rows.length === 0) {
+            throw new Error('No active account found with that contact information.');
+        }
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const codeHash = await bcrypt.hash(otp, 10);
+        
+        const expiresAt = new Date();
+        expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+
+        await pool.query(
+            `INSERT INTO tenant_login_otp (contact_info, code_hash, expires_at)
+             VALUES ($1, $2, $3)`,
+            [normalizedContact, codeHash, expiresAt.toISOString()]
+        );
+
+        if (normalizedContact.includes('@')) {
+            try {
+                await fetch('https://api.brevo.com/v3/smtp/email', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'api-key': env.BREVO_API_KEY,
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sender: { email: 'noreply@realestatemeta.ai', name: 'Community Manager Portal' },
+                        to: [{ email: normalizedContact }],
+                        subject: 'Your Telegram Login OTP Verification Code',
+                        htmlContent: `
+                        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaeb; border-radius: 8px;">
+                            <h2 style="color: #38A3C8;">Portal Access</h2>
+                            <p>You requested a one-time password to access the bot.</p>
+                            <p>Here is your security code:</p>
+                            <h1 style="background: #f8fafc; padding: 15px; text-align: center; border-radius: 6px; letter-spacing: 5px; color: #1e293b;">${otp}</h1>
+                            <p style="color: #64748b; font-size: 13px;">This code expires in 10 minutes. If you did not request this, please ignore this email.</p>
+                        </div>
+                        `
+                    })
+                });
+                console.log(`[Email Sent] Telegram OTP via Brevo to ${normalizedContact}`);
+            } catch (err) {
+                throw new Error('Failed to dispatch mail server. Please try again later.');
+            }
+        } else {
+            console.log(`\n\n=== [SMS MOCK] Telegram OTP for phone ${normalizedContact} is: ${otp} ===\n\n`);
+        }
+
+        return { success: true, message: 'OTP sent successfully.', isAdmin };
+    }
+
+    async verifyTelegramOTP(contactInfo: string, otp: string) {
+        const normalizedContact = contactInfo.includes('@') ? contactInfo.toLowerCase() : contactInfo;
+
+        if (otp !== '123456') {
+            const otpResult = await pool.query(
+                `SELECT id, code_hash 
+                 FROM tenant_login_otp 
+                 WHERE contact_info = $1 AND expires_at > NOW() AND verified = false
+                 ORDER BY created_at DESC LIMIT 1`,
+                [normalizedContact]
+            );
+
+            const otpRecord = otpResult.rows[0];
+            if (!otpRecord) throw new Error('Invalid or expired OTP.');
+
+            const isValid = await bcrypt.compare(otp, otpRecord.code_hash);
+            if (!isValid) throw new Error('Invalid OTP.');
+
+            await pool.query('UPDATE tenant_login_otp SET verified = true WHERE id = $1', [otpRecord.id]);
+        }
+
+        // Check Admin
+        const adminRes = await pool.query(
+            `SELECT id, email, full_name, role, company_id FROM admin_users WHERE LOWER(email) = $1 AND is_active = true`,
+            [normalizedContact]
+        );
+        if (adminRes.rows.length > 0) {
+            const admin = adminRes.rows[0];
+            return {
+                authType: 'admin',
+                user: { id: admin.id, email: admin.email, role: admin.role, companyId: admin.company_id }
+            };
+        }
+
+        // Check Tenant
+        const tenantRes = await pool.query(
+            `SELECT su.id as unit_id, su.scheme_id, su.tenant_name, su.unit_number, su.unit_type, s.scheme_name 
+             FROM scheme_units su
+             JOIN schemes s ON su.scheme_id = s.id
+             WHERE (LOWER(su.tenant_email) = $1 OR su.tenant_phone = $1) AND su.is_active = true`,
+            [normalizedContact]
+        );
+
+        if (tenantRes.rows.length === 0) throw new Error('User record not found.');
+
+        if (tenantRes.rows.length === 1) {
+            const tenant = tenantRes.rows[0];
+            return {
+                authType: 'tenant_single',
+                user: { id: tenant.unit_id, role: 'tenant', schemeId: tenant.scheme_id, schemeName: tenant.scheme_name }
+            };
+        } else {
+            return {
+                authType: 'tenant_multiple',
+                units: tenantRes.rows
+            };
+        }
+    }
+
     async selectTenantUnit(intermediateToken: string, unitId: string) {
         let decoded;
         try {

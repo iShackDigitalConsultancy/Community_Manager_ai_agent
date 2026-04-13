@@ -15,12 +15,28 @@ export class AdminSchemes implements OnInit {
   schemes: any[] = [];
   companies: any[] = []; // for super admin dropdown
   isLoading = false;
+
+  // Pagination state
+  currentPage = 1;
+  pageSize = 15;
+  totalItems = 0;
+  totalPages = 0;
+
+  searchQuery = '';
+  searchTimeout: any;
+
   showAddModal = false;
   isSuperAdmin = false;
   isEditing = false;
   editingSchemeId: string | null = null;
 
-  newScheme = { name: '', code: '', type: 'sectional_title', companyId: '' };
+  showUploadModal = false;
+  uploadFile: File | null = null;
+  uploadCompanyId = '';
+  isUploading = false;
+  uploadResult: { successCount: number, errorCount: number } | null = null;
+
+  newScheme = { name: '', code: '', type: 'sectional_title', companyId: '', address: '', facilitiesManager: '', managerEmail: '', unitsCount: null as number | null };
 
   constructor(private http: HttpClient, private cd: ChangeDetectorRef) {}
 
@@ -56,9 +72,15 @@ export class AdminSchemes implements OnInit {
   loadSchemes() {
     this.isLoading = true;
     this.cd.detectChanges();
-    this.http.get<any[]>('/api/v1/admin/schemes').subscribe({
-      next: (data) => {
-        this.schemes = data;
+    const searchParam = this.searchQuery ? `&search=${encodeURIComponent(this.searchQuery)}` : '';
+    this.http.get<any>(`/api/v1/admin/schemes?page=${this.currentPage}&limit=${this.pageSize}${searchParam}`).subscribe({
+      next: (res) => {
+        // Backend returns `{ data, totalItems, totalPages, currentPage }` based on schema updates
+        this.schemes = res.data || [];
+        this.totalItems = res.totalItems || 0;
+        this.totalPages = res.totalPages || 0;
+        this.currentPage = res.currentPage || 1;
+        
         this.isLoading = false;
         this.cd.detectChanges();
       },
@@ -70,8 +92,32 @@ export class AdminSchemes implements OnInit {
     });
   }
 
+  onSearchChange() {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      this.currentPage = 1;
+      this.loadSchemes();
+    }, 400);
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadSchemes();
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadSchemes();
+    }
+  }
+
   openAddModal() {
-    this.newScheme = { name: '', code: '', type: 'sectional_title', companyId: '' };
+    this.newScheme = { name: '', code: '', type: 'sectional_title', companyId: '', address: '', facilitiesManager: '', managerEmail: '', unitsCount: null };
     this.isEditing = false;
     this.editingSchemeId = null;
     this.showAddModal = true;
@@ -82,7 +128,11 @@ export class AdminSchemes implements OnInit {
       name: scheme.scheme_name, 
       code: scheme.scheme_code, 
       type: scheme.scheme_type, 
-      companyId: scheme.company_id || '' 
+      companyId: scheme.company_id || '',
+      address: scheme.address || '',
+      facilitiesManager: scheme.facilities_manager || '',
+      managerEmail: scheme.manager_email || '',
+      unitsCount: scheme.mapped_units_count || null
     };
     this.isEditing = true;
     this.editingSchemeId = scheme.id;
@@ -102,7 +152,14 @@ export class AdminSchemes implements OnInit {
       code: this.newScheme.code,
       type: this.newScheme.type,
       companyId: this.newScheme.companyId,
-      scheme_name: this.newScheme.name // Used in PUT updates
+      address: this.newScheme.address,
+      facilitiesManager: this.newScheme.facilitiesManager,
+      managerEmail: this.newScheme.managerEmail,
+      unitsCount: this.newScheme.unitsCount,
+      scheme_name: this.newScheme.name, // Used in PUT updates
+      facilities_manager: this.newScheme.facilitiesManager,
+      manager_email: this.newScheme.managerEmail,
+      mapped_units_count: this.newScheme.unitsCount
     };
 
     if (this.isEditing && this.editingSchemeId) {
@@ -129,6 +186,51 @@ export class AdminSchemes implements OnInit {
     this.http.delete(`/api/v1/admin/schemes/${id}`).subscribe({
       next: () => this.loadSchemes(),
       error: (err) => console.error('Failed to delete scheme', err)
+    });
+  }
+
+  openUploadModal() {
+    this.uploadFile = null;
+    this.uploadCompanyId = '';
+    this.uploadResult = null;
+    this.showUploadModal = true;
+  }
+
+  closeUploadModal() {
+    this.showUploadModal = false;
+    this.uploadResult = null;
+    this.uploadFile = null;
+  }
+
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      this.uploadFile = event.target.files[0];
+    }
+  }
+
+  uploadCsv() {
+    if (!this.uploadFile) return;
+
+    const formData = new FormData();
+    formData.append('file', this.uploadFile);
+    if (this.isSuperAdmin) {
+      formData.append('companyId', this.uploadCompanyId);
+    }
+
+    this.isUploading = true;
+    this.uploadResult = null;
+
+    this.http.post<any>('/api/v1/admin/schemes/import', formData).subscribe({
+      next: (res) => {
+        this.isUploading = false;
+        this.uploadResult = { successCount: res.successCount, errorCount: res.errorCount };
+        this.loadSchemes();
+      },
+      error: (err) => {
+        this.isUploading = false;
+        console.error('Failed to upload CSV', err);
+        alert(err.error?.error || 'Upload failed');
+      }
     });
   }
 }

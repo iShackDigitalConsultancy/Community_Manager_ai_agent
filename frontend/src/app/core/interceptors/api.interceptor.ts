@@ -9,7 +9,7 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   
   // Prepend backend URL
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const backendUrl = isLocalhost ? 'http://127.0.0.1:3000' : 'https://community-ai-manager-backend-production.up.railway.app';
+  const backendUrl = isLocalhost ? 'http://127.0.0.1:3001' : 'https://wild-cooks-work.loca.lt';
   const apiReq = req.clone({
     url: req.url.startsWith('/') ? `${backendUrl}${req.url}` : req.url
   });

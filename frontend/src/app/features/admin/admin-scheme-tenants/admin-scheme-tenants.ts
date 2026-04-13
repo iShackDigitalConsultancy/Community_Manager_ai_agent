@@ -146,4 +146,14 @@ export class AdminSchemeTenants implements OnInit {
       });
     }
   }
+
+  deleteTenant(unitId: string) {
+    if (confirm('Are you sure you want to remove the tenant from this unit?')) {
+      const updates = { tenant_name: null, tenant_email: null, tenant_phone: null };
+      this.http.put(`/api/v1/admin/schemes/${this.schemeId}/units/${unitId}`, updates).subscribe({
+        next: () => this.loadUnits(),
+        error: (err) => alert('Failed to remove tenant: ' + err.error?.error)
+      });
+    }
+  }
 }

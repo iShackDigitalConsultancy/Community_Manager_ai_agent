@@ -243,6 +243,29 @@ export class Dashboard implements OnInit, AfterViewChecked {
     alert("Downloading official Conduct Rules PDF...");
   }
 
+  downloadCitedDocument(docId: string, title?: string) {
+    if (!docId) return;
+    const token = localStorage.getItem('admin_token') || localStorage.getItem('token');
+    
+    this.http.get(`/api/v1/chat/documents/${docId}/download`, {
+      responseType: 'blob',
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+    }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = title || 'Scheme_Document.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Download failed', err);
+        alert('Failed to securely download the document. It may have been removed.');
+      }
+    });
+  }
+
   triggerAttachmentSelection() {
     const fileInput = document.getElementById('chat-file-upload') as HTMLInputElement;
     if (fileInput) fileInput.click();

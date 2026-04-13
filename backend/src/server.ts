@@ -2,6 +2,7 @@ import app from './app';
 import { env } from './config/env';
 import { logger } from './shared/logger';
 import { pool } from './config/database';
+import { telegramService } from './modules/telegram/telegram.service';
 
 const startServer = async () => {
     let server: any;
@@ -13,6 +14,9 @@ const startServer = async () => {
         server = app.listen(env.PORT, () => {
             logger.info(`Server is running in ${env.NODE_ENV} mode on port ${env.PORT}`);
         });
+
+        // Initialize Telegram bots
+        await telegramService.initializeBots();
     } catch (error) {
         logger.error('Failed to start server:', error);
         process.exit(1);

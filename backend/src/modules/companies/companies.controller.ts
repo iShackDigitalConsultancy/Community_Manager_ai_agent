@@ -40,7 +40,8 @@ export const companiesController = {
     async list(req: AdminRequest, res: Response) {
         try {
             const status = req.query.status as string;
-            const companies = await companiesService.list(status);
+            const search = req.query.search as string;
+            const companies = await companiesService.list(status, search);
             res.json(companies);
         } catch (e: any) {
             if (e.message === 'A company with this name already exists.') {

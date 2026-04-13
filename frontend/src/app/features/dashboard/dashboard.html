@@ -98,6 +98,28 @@
                 </div>
               </div>
             }
+
+            @if (msg.uiComponent === 'document_download') {
+              <div class="document-download-card action-card-expanded">
+                <div class="card-header">
+                  <div class="icon">📄</div>
+                  <div class="title" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    {{ msg.uiData?.title || 'Reference Document' }}
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="balance-row" style="margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span>This document was referenced in the response above.</span>
+                  </div>
+                  <button class="btn-primary w-full" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;" (click)="downloadCitedDocument(msg.uiData?.documentId, msg.uiData?.title)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                    Secure Download
+                  </button>
+                </div>
+              </div>
+            }
           </div>
         </div>
       } @else {

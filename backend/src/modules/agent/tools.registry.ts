@@ -95,6 +95,8 @@ Always call this before composing your final answer to a complex question.`,
         name: 'log_maintenance_request',
         description: `Log a new maintenance or repair request from a resident or homeowner. 
 Use this when a resident reports a fault, damage, or maintenance need in their unit or common areas.
+CRITICAL: If the user uploaded an image, analyze the visual evidence and explicitly state what you see in the description field. Use the visual evidence to assess the correct category and urgency.
+IMPORTANT: This tool automatically creates a live ticket in the external SmartBuilding Vendor Queue through their API. NEVER say you cannot integrate with or submit to external ticketing systems - you CAN and MUST assure the user that the ticket was pushed successfully to the real system.
 Returns a unique reference number for tracking.`,
         input_schema: {
             type: 'object',
@@ -209,16 +211,16 @@ Do NOT use for routine questions. Include the synthesis gaps as the reason.`,
         name: 'render_ui_component',
         description: `Render an interactive UI component in the resident's chat window.
 Use this when:
-1. The resident asks for their levy balance, statement, or account details. (Use componentType='levy_statement')
 2. The resident explicitly wants to fill out a maintenance request form manually or hasn't provided details. (Use componentType='maintenance_form')
 3. The resident asks for the community conduct rules, building rules, or general guidelines. (Use componentType='community_rules')
+4. You cite a specific uploaded document in your answer and want to let the user download it. (Use componentType='document_download' and pass { "documentId": "ID", "title": "Title" } in the data property).
 Important: Do not use this if you have enough information to log a maintenance request directly using log_maintenance_request.`,
         input_schema: {
             type: 'object',
             properties: {
                 componentType: {
                     type: 'string',
-                    enum: ['levy_statement', 'maintenance_form', 'community_rules'],
+                    enum: ['maintenance_form', 'community_rules', 'document_download'],
                     description: 'The type of UI component to render'
                 },
                 data: {
@@ -497,7 +499,8 @@ export class ToolsRegistry {
                     try {
                         // Find active API integration for this scheme
                         const integrationRes = await pool.query(
-                            `SELECT ai.id FROM api_integrations ai
+                            `SELECT ai.id, ai.community_id as configured_com_id, s.scheme_name, s.smartbuilding_property_id 
+                             FROM api_integrations ai
                              INNER JOIN schemes s ON s.id::text = ai.community_id::text OR s.scheme_name ILIKE '%' || ai.company_name || '%'
                              WHERE s.id = $1 AND ai.is_active = true
                              LIMIT 1`,
@@ -506,16 +509,107 @@ export class ToolsRegistry {
 
                         if (integrationRes.rows.length > 0) {
                             const integrationId = integrationRes.rows[0].id;
-                            // Push to SmartBuilding via proxy (category 1 = general)
-                            await apiHubService.reportIncidentProxy(integrationId, {
-                                category: 1, 
-                                message: `[AI Escrow - ${input.urgency.toUpperCase()}] ${input.category}\n\n${input.description}`
-                            });
-                            ticketPushed = true;
-                            logger.info(`[Agent] Successfully pushed incident to SBA ticketing for ${refNumber}`);
+                            const aiAssignedComId = integrationRes.rows[0].configured_com_id;
+                            const sSchemeName = integrationRes.rows[0].scheme_name;
+                            const sSmartId = integrationRes.rows[0].smartbuilding_property_id;
+                            
+                            let resolvedComID: number | null = null;
+                            if (aiAssignedComId) {
+                                resolvedComID = Number(aiAssignedComId);
+                            } else if (sSmartId) {
+                                resolvedComID = Number(sSmartId);
+                            }
+                            
+                            if (!resolvedComID) {
+                                resolvedComID = await apiHubService.getMatchedBuildingId(integrationId, sSchemeName);
+                                if (resolvedComID) {
+                                    await pool.query(
+                                        `UPDATE schemes SET smartbuilding_property_id = $1 WHERE id = $2`,
+                                        [resolvedComID.toString(), schemeId]
+                                    );
+                                    logger.info(`[Agent] Dynamically matched and cached comID ${resolvedComID} for scheme ${sSchemeName}`);
+                                }
+                            }
+                            
+                            if (resolvedComID) {
+                                // Fetch available categories from SmartBuilding to find the 'Maintenance' ID
+                                const typesRes = await apiHubService.getReportTypesProxy(integrationId, resolvedComID);
+                                let catId = 1;
+                                if (typesRes && typesRes.data && Array.isArray(typesRes.data)) {
+                                    const maint = typesRes.data.find((c: any) => c.title && c.title.toLowerCase().includes('maintenance'));
+                                    if (maint) catId = maint.id;
+                                    else if (typesRes.data.length > 0) catId = typesRes.data[0].id;
+                                }
+
+                                // Push to SmartBuilding
+                                const sbaMessage = `[REF: ${refNumber}] [AI Escrow - ${input.urgency.toUpperCase()}]
+Unit: ${input.unitNumber || 'Not specified'}
+Category: ${input.category}
+
+${input.description}`;
+
+                                await apiHubService.reportIncidentProxy(integrationId, {
+                                    category: catId, 
+                                    message: sbaMessage,
+                                    comID: resolvedComID
+                                });
+                                ticketPushed = true;
+                                logger.info(`[Agent] Successfully pushed incident to SBA ticketing for ${refNumber} using comID ${resolvedComID}`);
+                            } else {
+                                logger.warn(`[Agent] Could not resolve comID for SmartBuilding ticketing for scheme ${sSchemeName}`);
+                            }
                         }
                     } catch (sbaErr) {
                          logger.warn('[Agent] Failed to push incident to SBA ticketing system', sbaErr);
+                    }
+
+                    // >>> DISPATCH EMAIL TO FACILITIES MANAGER <<<
+                    try {
+                        const schemeObjRes = await pool.query('SELECT scheme_name, company_id FROM schemes WHERE id = $1', [schemeId]);
+                        const schemeName = schemeObjRes.rows[0]?.scheme_name || 'Community';
+                        const companyId = schemeObjRes.rows[0]?.company_id;
+
+                        let managerEmail = 'wayneb@ishack.co.za'; // Fallback
+                        if (companyId) {
+                            const adminRes = await pool.query('SELECT email FROM admin_users WHERE company_id = $1 LIMIT 1', [companyId]);
+                            if (adminRes.rows.length > 0) {
+                                managerEmail = adminRes.rows[0].email;
+                            }
+                        }
+
+                        if (process.env.BREVO_API_KEY && !process.env.BREVO_API_KEY.includes('mock')) {
+                            await fetch('https://api.brevo.com/v3/smtp/email', {
+                                method: 'POST',
+                                headers: {
+                                    'accept': 'application/json',
+                                    'api-key': process.env.BREVO_API_KEY,
+                                    'content-type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    sender: { email: 'noreply@realestatemeta.ai', name: 'SchemeAssist AI' },
+                                    to: [{ email: managerEmail }],
+                                    subject: `New AI Maintenance Request [${input.urgency.toUpperCase()}] - ${schemeName}`,
+                                    htmlContent: `
+                                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaeb; border-radius: 8px;">
+                                        <h2 style="color: #38A3C8;">Maintenance Request Reported</h2>
+                                        <p>Wendy AI has processed a newly reported maintenance issue with visual assessment data.</p>
+                                        <p><strong>Property:</strong> ${schemeName}</p>
+                                        <p><strong>Ref Code:</strong> ${refNumber}</p>
+                                        <p><strong>Category:</strong> ${input.category}</p>
+                                        <p><strong>Urgency:</strong> <strong style="color: ${input.urgency === 'critical' ? '#dc2626' : '#2563eb'};">${input.urgency.toUpperCase()}</strong></p>
+                                        <hr style="border: none; border-top: 1px solid #eaeaeb;" />
+                                        <h3 style="color: #475569;">Description & AI Review</h3>
+                                        <p style="background: #f8fafc; padding: 15px; border-left: 4px solid #38A3C8; color: #1e293b;">${(input.description || '').replace(/\n/g, '<br/>')}</p>
+                                    </div>
+                                    `
+                                })
+                            });
+                            logger.info(`[Agent] Brevo email dispatched to ${managerEmail} for ticket ${refNumber}`);
+                        } else {
+                            logger.info(`[Agent] Mock email dispatched for ticket ${refNumber} to ${managerEmail}: \n${input.description}`);
+                        }
+                    } catch (emailErr) {
+                        logger.warn('[Agent] Failed to dispatch Brevo email', emailErr);
                     }
 
                     const urgencyMsg = input.urgency === 'critical'

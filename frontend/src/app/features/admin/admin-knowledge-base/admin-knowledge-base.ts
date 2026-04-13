@@ -37,13 +37,14 @@ export class AdminKnowledgeBase implements OnInit {
 
   loadCommunities() {
     this.isLoading = true;
-    this.http.get<any[]>('/api/v1/admin/schemes').subscribe({
-      next: (data) => {
-        this.communities = data;
-        this.filteredCommunities = data;
+    this.http.get<any>('/api/v1/admin/schemes?limit=1000').subscribe({
+      next: (res) => {
+        const items = res.data || [];
+        this.communities = items;
+        this.filteredCommunities = items;
         this.isLoading = false;
-        if (data.length > 0) {
-          this.selectCommunity(data[0]);
+        if (items.length > 0) {
+          this.selectCommunity(items[0]);
         }
       },
       error: (err) => {

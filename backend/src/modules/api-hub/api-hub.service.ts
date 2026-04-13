@@ -291,17 +291,44 @@ export class ApiHubService {
         return data;
     }
 
-    async reportIncidentProxy(id: string, payload: { category: number; message: string; longitude?: number; latitude?: number }) {
+    async getMatchedBuildingId(id: string, schemeName: string): Promise<number | null> {
+        const buildingsRes: any = await this.getBuildings(id);
+        // SmartBuilding returns data inside data or buildings depending on response
+        const buildingsArray = Array.isArray(buildingsRes) ? buildingsRes : 
+                              (Array.isArray(buildingsRes.data) ? buildingsRes.data : []);
+        
+        if (!buildingsArray || buildingsArray.length === 0) return null;
+
+        const nameLower = schemeName.toLowerCase();
+
+        // 1. Exact match
+        const exactMatch = buildingsArray.find((b: any) => 
+            b.building_name?.toLowerCase() === nameLower
+        );
+        if (exactMatch) return exactMatch.building_id;
+
+        // 2. Substring match
+        const substringMatch = buildingsArray.find((b: any) => {
+            const bName = b.building_name?.toLowerCase() || '';
+            return bName.includes(nameLower) || nameLower.includes(bName);
+        });
+
+        return substringMatch ? substringMatch.building_id : null;
+    }
+
+    async reportIncidentProxy(id: string, payload: { category: number; message: string; comID?: number; longitude?: number; latitude?: number }) {
         const { row, creds } = await this.getAndCacheToken(id);
-        if (!row.community_id) throw new Error('community_id required to report an incident');
-        const { data } = await reportIncident(creds, { ...payload, comID: row.community_id });
+        const resolvedComID = payload.comID || row.community_id;
+        if (!resolvedComID) throw new Error('comID is required to report an incident (either via payload or api_integrations)');
+        const { data } = await reportIncident(creds, { ...payload, comID: resolvedComID });
         return data;
     }
 
-    async getReportTypesProxy(id: string) {
+    async getReportTypesProxy(id: string, comID?: number) {
         const { row, creds } = await this.getAndCacheToken(id);
-        if (!row.community_id) throw new Error('community_id required');
-        const { data } = await getReportTypes(creds, row.community_id);
+        const resolvedComID = comID || row.community_id;
+        if (!resolvedComID) throw new Error('comID is required to get report types');
+        const { data } = await getReportTypes(creds, resolvedComID);
         return data;
     }
 

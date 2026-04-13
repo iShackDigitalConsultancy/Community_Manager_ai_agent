@@ -50,13 +50,20 @@ export class CompaniesService {
         return res.rows[0];
     }
 
-    async list(status?: string) {
-        let query = 'SELECT id, name, status, metadata, address, email, contact_number, main_contact_person, created_at FROM companies';
+    async list(status?: string, search?: string) {
+        let query = 'SELECT id, name, status, metadata, address, email, contact_number, main_contact_person, created_at FROM companies WHERE 1=1';
         const params: any[] = [];
+        let index = 1;
         
         if (status) {
-            query += ' WHERE status = $1';
+            query += ` AND status = $${index++}`;
             params.push(status);
+        }
+
+        if (search) {
+            query += ` AND (name ILIKE $${index} OR email ILIKE $${index} OR address ILIKE $${index})`;
+            params.push(`%${search}%`);
+            index++;
         }
         
         query += ' ORDER BY name ASC';

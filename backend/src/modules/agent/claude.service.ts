@@ -24,9 +24,12 @@ export class ClaudeService {
         schemeName: string, 
         userMessage: string,
         tenantContext?: TenantContext,
-        onStream?: (event: { type: 'text' | 'status', content: string }) => void
+        onStream?: (event: { type: 'text' | 'status', content: string }) => void,
+        image?: { base64: string; mimeType: string }
     ) {
-        await conversationService.addMessage(conversationId, 'user', userMessage);
+        // If image exists, save a placeholder text in history, but we'll manually inject the vision block into current messages
+        const textContent = image ? `[User uploaded an image]: ${userMessage}` : userMessage;
+        await conversationService.addMessage(conversationId, 'user', textContent);
 
         const history = await conversationService.getHistory(conversationId);
 
@@ -36,6 +39,24 @@ export class ClaudeService {
                 role: m.role,
                 content: m.content
             }));
+
+        // If this exact turn has an image, inject the image block into the LAST message we just added
+        if (image && messages.length > 0) {
+            messages[messages.length - 1].content = [
+                {
+                    type: "image",
+                    source: {
+                        type: "base64",
+                        media_type: image.mimeType as any,
+                        data: image.base64,
+                    },
+                },
+                {
+                    type: "text",
+                    text: userMessage
+                }
+            ];
+        }
 
         const systemPrompt = promptBuilder.buildSystemPrompt(schemeName, undefined, tenantContext);
 

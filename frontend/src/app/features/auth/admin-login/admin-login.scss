@@ -25,8 +25,9 @@ $glass-border: rgba(255, 255, 255, 0.08);
   .glow-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.6;
+    filter: blur(35px);
+    will-change: transform;
+    opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     animation: floatOrb 15s ease-in-out infinite alternate;
@@ -65,8 +66,8 @@ $glass-border: rgba(255, 255, 255, 0.08);
   width: 100%;
   max-width: 440px;
   background: $glass-bg;
-  backdrop-filter: blur(40px) saturate(150%);
-  -webkit-backdrop-filter: blur(40px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   border-radius: 28px;
   padding: 3.5rem 3rem;
   border: 1px solid $glass-border;
@@ -75,7 +76,8 @@ $glass-border: rgba(255, 255, 255, 0.08);
     inset 0 1px 0 rgba(255,255,255,0.1);
   animation: cardReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
-  transform: translateY(20px);
+  will-change: transform, opacity;
+  transform: translateY(20px) translateZ(0);
 }
 
 @keyframes cardReveal {
