@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
-    "start": "ts-node src/server.ts",
+    "start": "npm run db:migrate && ts-node src/server.ts",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "db:migrate": "ts-node src/database/run-migrations.ts",
