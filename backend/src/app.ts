@@ -22,7 +22,17 @@ import { telegramRoutes } from './modules/telegram/telegram.routes';
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: [env.ADMIN_PORTAL_URL, env.CHAT_WIDGET_URL, 'http://127.0.0.1:4200', 'http://localhost:4200'] }));
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    const allowedOrigins = [env.ADMIN_PORTAL_URL, env.CHAT_WIDGET_URL, 'http://127.0.0.1:4200', 'http://localhost:4200'];
+    if (allowedOrigins.includes(origin) || origin.endsWith('.up.railway.app') || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
