@@ -3,24 +3,27 @@ import { apiHubService } from '../api-hub/api-hub.service';
 
 export class AdminDashboardService {
     async getGlobalStats() {
-        const [schemesRes, unitsRes, docsRes, syncsRes, compRes] = await Promise.all([
-            pool.query("SELECT COUNT(*) FROM schemes WHERE is_active = true"),
-            pool.query("SELECT COUNT(*) FROM scheme_units WHERE is_active = true"),
-            pool.query("SELECT COUNT(DISTINCT scheme_id) FROM knowledge_documents WHERE is_active = true"),
-            pool.query("SELECT c.name as name, ai.sync_status, ai.last_synced_at, ai.sync_error FROM api_integrations ai JOIN companies c ON ai.company_id = c.id WHERE ai.last_synced_at IS NOT NULL ORDER BY ai.last_synced_at DESC LIMIT 5"),
-            pool.query(`
-                SELECT c.id, c.name, COUNT(s.id) as communities_count,
-                       COALESCE(
-                           json_agg(json_build_object('id', s.id, 'name', s.scheme_name, 'code', s.scheme_code)) FILTER (WHERE s.id IS NOT NULL),
-                           '[]'
-                       ) as communities
-                FROM companies c
-                LEFT JOIN schemes s ON c.id = s.company_id AND s.is_active = true
-                WHERE c.status = 'active'
-                GROUP BY c.id, c.name
-                ORDER BY c.name
-            `)
-        ]);
+        const schemesP = pool.query("SELECT COUNT(*) FROM schemes WHERE is_active = true").catch(e => { console.error('Stats Error schemes:', e); return { rows: [{ count: '0' }] }; });
+        const unitsP = pool.query("SELECT COUNT(*) FROM scheme_units WHERE is_active = true").catch(e => { console.error('Stats Error units:', e); return { rows: [{ count: '0' }] }; });
+        const docsP = pool.query("SELECT COUNT(DISTINCT scheme_id) FROM knowledge_documents WHERE is_active = true").catch(e => { console.error('Stats Error docs:', e); return { rows: [{ count: '0' }] }; });
+        
+        const syncsP = pool.query("SELECT c.name as name, ai.sync_status, ai.last_synced_at, ai.sync_error FROM api_integrations ai JOIN companies c ON ai.company_id = c.id WHERE ai.last_synced_at IS NOT NULL ORDER BY ai.last_synced_at DESC LIMIT 5")
+            .catch(e => { console.error('Stats Error syncs:', e); return { rows: [] }; });
+            
+        const compP = pool.query(`
+            SELECT c.id, c.name, COUNT(s.id) as communities_count,
+                   COALESCE(
+                       json_agg(json_build_object('id', s.id, 'name', s.scheme_name, 'code', s.scheme_code)) FILTER (WHERE s.id IS NOT NULL),
+                       '[]'
+                   ) as communities
+            FROM companies c
+            LEFT JOIN schemes s ON c.id = s.company_id AND s.is_active = true
+            WHERE c.status = 'active'
+            GROUP BY c.id, c.name
+            ORDER BY c.name
+        `).catch(e => { console.error('Stats Error comp:', e); return { rows: [] }; });
+
+        const [schemesRes, unitsRes, docsRes, syncsRes, compRes] = await Promise.all([schemesP, unitsP, docsP, syncsP, compP]);
 
         return {
             totalCommunities: parseInt(schemesRes.rows[0].count, 10) || 0,
