@@ -7,7 +7,7 @@ export class AdminDashboardService {
             pool.query("SELECT COUNT(*) FROM schemes WHERE is_active = true"),
             pool.query("SELECT COUNT(*) FROM scheme_units WHERE is_active = true"),
             pool.query("SELECT COUNT(DISTINCT scheme_id) FROM knowledge_documents WHERE is_active = true"),
-            pool.query("SELECT company_name as name, sync_status, last_synced_at, sync_error FROM api_integrations WHERE last_synced_at IS NOT NULL ORDER BY last_synced_at DESC LIMIT 5"),
+            pool.query("SELECT c.name as name, ai.sync_status, ai.last_synced_at, ai.sync_error FROM api_integrations ai JOIN companies c ON ai.company_id = c.id WHERE ai.last_synced_at IS NOT NULL ORDER BY ai.last_synced_at DESC LIMIT 5"),
             pool.query(`
                 SELECT c.id, c.name, COUNT(s.id) as communities_count,
                        COALESCE(
