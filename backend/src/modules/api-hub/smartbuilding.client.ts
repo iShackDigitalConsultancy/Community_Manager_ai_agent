@@ -1,7 +1,7 @@
 import { logger } from '../../shared/logger';
 import { env } from '../../config/env';
 
-const SBA_BASE = 'https://smartbuildingapp.com:8443';
+const SBA_BASE = 'https://api.smartbuildingapp.com';
 const TOKEN_URL = `${SBA_BASE}/auth/developer-key/token`;
 const TOKEN_TTL_MS = 55 * 60 * 1000; // 55 min safety margin before 60min expiry
 const INCIDENTS_API_BASE = 'https://api.smartbuildingapp.com';
