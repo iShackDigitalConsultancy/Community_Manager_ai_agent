@@ -26,12 +26,12 @@ export const apiHubController = {
 
     async create(req: Request, res: Response) {
         try {
-            const { companyName, provider, brandId, clientId, clientSecret, communityId, dbIdentifier } = req.body;
-            if (!companyName || !brandId || !clientId || !clientSecret) {
-                return res.status(400).json({ error: 'companyName, brandId, clientId and clientSecret are required' });
+            const { companyId, provider, brandId, clientId, clientSecret, communityId, dbIdentifier } = req.body;
+            if (!companyId || !brandId || !clientId || !clientSecret) {
+                return res.status(400).json({ error: 'companyId, brandId, clientId and clientSecret are required' });
             }
             res.status(201).json(await apiHubService.createIntegration(
-                { companyName, provider, brandId, clientId, clientSecret, communityId, dbIdentifier }
+                { companyId, provider, brandId, clientId, clientSecret, communityId, dbIdentifier }
             ));
         } catch (e: any) { handleError(res, e); }
     },

@@ -11,7 +11,7 @@ import {
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface CreateIntegrationDto {
-    companyName: string;
+    companyId: string;
     provider?: string;
     brandId: string;
     clientId: string;
@@ -54,9 +54,12 @@ export class ApiHubService {
 
     async listIntegrations() {
         const res = await pool.query(
-            `SELECT id, company_name, provider, brand_id, client_id, community_id, db_identifier,
-                    is_active, last_synced_at, sync_status, sync_error, created_at, updated_at
-             FROM api_integrations ORDER BY company_name`
+            `SELECT ai.id, ai.company_id, ai.provider, ai.brand_id, ai.client_id, ai.community_id, ai.db_identifier,
+                    ai.is_active, ai.last_synced_at, ai.sync_status, ai.sync_error, ai.created_at, ai.updated_at,
+                    c.name as company_name
+             FROM api_integrations ai
+             JOIN companies c ON ai.company_id = c.id
+             ORDER BY c.name`
         );
         return res.rows;
     }
@@ -69,10 +72,10 @@ export class ApiHubService {
 
     async createIntegration(dto: CreateIntegrationDto) {
         const res = await pool.query(
-            `INSERT INTO api_integrations (company_name, provider, brand_id, client_id, client_secret, community_id, db_identifier)
+            `INSERT INTO api_integrations (company_id, provider, brand_id, client_id, client_secret, community_id, db_identifier)
              VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING *`,
-            [dto.companyName, dto.provider || 'smartbuildingapp', dto.brandId, dto.clientId,
+            [dto.companyId, dto.provider || 'smartbuildingapp', dto.brandId, dto.clientId,
              dto.clientSecret, dto.communityId || null, dto.dbIdentifier || null]
         );
         return sanitizeRow(res.rows[0]);
@@ -83,7 +86,7 @@ export class ApiHubService {
         const values: any[] = [];
         let i = 1;
 
-        if (dto.companyName !== undefined)  { fields.push(`company_name = $${i++}`);   values.push(dto.companyName); }
+        if (dto.companyId !== undefined)  { fields.push(`company_id = $${i++}`);    values.push(dto.companyId); }
         if (dto.brandId !== undefined)       { fields.push(`brand_id = $${i++}`);       values.push(dto.brandId); }
         if (dto.clientId !== undefined)      { fields.push(`client_id = $${i++}`);      values.push(dto.clientId); }
         if (dto.clientSecret !== undefined)  { fields.push(`client_secret = $${i++}`);  values.push(dto.clientSecret); }
@@ -184,13 +187,13 @@ export class ApiHubService {
                             [id]
                         ).catch(() => ({ rows: [] }));
 
-                        // Find the scheme linked to this integration (may need mapping)
-                        // For now: upsert into scheme_units using unit_no + property_name as identifier
+                        // Find the scheme linked to this integration
+                        // For now: upsert into scheme_units using unit_no
                         await pool.query(
                             `INSERT INTO scheme_units (scheme_id, unit_number, tenant_name, owner_name)
                              SELECT s.id, $1, $2, $3
                              FROM schemes s
-                             INNER JOIN api_integrations ai ON s.id::text = ai.community_id::text OR s.scheme_name ILIKE '%' || ai.company_name || '%'
+                             INNER JOIN api_integrations ai ON ai.company_id = s.company_id
                              WHERE ai.id = $4
                              LIMIT 1
                              ON CONFLICT DO NOTHING`,

@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 interface Integration {
   id: string;
+  company_id: string;
   company_name: string;
   provider: string;
   brand_id: string;
@@ -29,6 +30,7 @@ export class AdminApiHub implements OnInit {
   private readonly API = 'http://localhost:3000/api/v1/admin/api-hub';
 
   integrations: Integration[] = [];
+  companies: any[] = [];
   loading = true;
   error: string | null = null;
 
@@ -60,6 +62,7 @@ export class AdminApiHub implements OnInit {
 
   ngOnInit() {
     this.loadIntegrations();
+    this.loadCompanies();
   }
 
   private get headers(): HttpHeaders {
@@ -72,6 +75,13 @@ export class AdminApiHub implements OnInit {
     this.http.get<Integration[]>(this.API, { headers: this.headers }).subscribe({
       next: data => { this.integrations = data; this.loading = false; },
       error: err => { this.error = err.error?.error || 'Failed to load integrations'; this.loading = false; }
+    });
+  }
+
+  loadCompanies() {
+    this.http.get<any[]>('http://localhost:3000/api/v1/admin/companies', { headers: this.headers }).subscribe({
+      next: data => { this.companies = data; },
+      error: err => console.error('Failed to load companies', err)
     });
   }
 
@@ -100,7 +110,7 @@ export class AdminApiHub implements OnInit {
     this.drawerError = null;
 
     const payload: any = {
-      companyName: this.form.company_name,
+      companyId: this.form.company_id,
       brandId: this.form.brand_id,
       clientId: this.form.client_id,
       communityId: this.form.community_id || null,

@@ -170,9 +170,11 @@
   <div class="drawer-body">
 
     <div class="form-group">
-      <label>Company / PM Name <span class="required">*</span></label>
-      <input id="inp-company-name" type="text" class="input-base" [(ngModel)]="form.company_name"
-             placeholder="e.g. Acme Property Management" />
+      <label>Property Management Company <span class="required">*</span></label>
+      <select id="inp-company-id" class="input-base" [(ngModel)]="form.company_id">
+        <option [ngValue]="undefined" disabled>Select a PM Company</option>
+        <option *ngFor="let c of companies" [value]="c.id">{{ c.name }}</option>
+      </select>
     </div>
 
     <div class="form-row">
