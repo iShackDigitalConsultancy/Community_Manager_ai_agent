@@ -131,7 +131,10 @@ export class Dashboard implements OnInit, AfterViewChecked {
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
     try {
-      const response = await fetch('http://127.0.0.1:3000/api/v1/chat/message', {
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const backendUrl = isLocalhost ? 'http://127.0.0.1:3001' : 'https://community-ai-manager-backend-production.up.railway.app';
+      
+      const response = await fetch(`${backendUrl}/api/v1/chat/message`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
