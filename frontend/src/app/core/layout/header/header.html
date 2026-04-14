@@ -6,13 +6,13 @@
   <div class="user-profile">
     <div class="notifications">
       <span class="bell-icon">🔔</span>
-      <div class="badge">3</div>
+      <div class="badge" *ngIf="unreadAlerts > 0">{{ unreadAlerts }}</div>
     </div>
     <div class="avatar-container">
-      <div class="avatar">WB</div>
+      <div class="avatar">{{ userInitials }}</div>
       <div class="user-info">
-        <span class="name">Wayne Berger</span>
-        <span class="role">Administrator</span>
+        <span class="name">{{ userName }}</span>
+        <span class="role">{{ userRole }}</span>
       </div>
       <span class="chevron">▼</span>
     </div>
