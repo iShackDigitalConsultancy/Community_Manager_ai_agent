@@ -67,7 +67,7 @@ export class AuthService {
             throw new Error('No active tenant found with that contact information.');
         }
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp = '123456'; // DEV BYPASS
         const codeHash = await bcrypt.hash(otp, 10);
         
         const expiresAt = new Date();
@@ -79,6 +79,7 @@ export class AuthService {
             [contactInfo, codeHash, expiresAt.toISOString()]
         );
 
+        /* --- DEV BYPASS: Disconnected OTP ---
         if (contactInfo.includes('@')) {
             try {
                 await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -112,6 +113,7 @@ export class AuthService {
             // SMS fallback/log
             console.log(`\n\n=== [SMS MOCK] OTP for phone ${contactInfo} is: ${otp} ===\n\n`);
         }
+        ----------------------------------- */
 
         return { success: true, message: 'OTP sent successfully.' };
     }
@@ -220,7 +222,7 @@ export class AuthService {
             throw new Error('No active account found with that contact information.');
         }
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp = '123456'; // DEV BYPASS
         const codeHash = await bcrypt.hash(otp, 10);
         
         const expiresAt = new Date();
@@ -232,6 +234,7 @@ export class AuthService {
             [normalizedContact, codeHash, expiresAt.toISOString()]
         );
 
+        /* --- DEV BYPASS: Disconnected OTP ---
         if (normalizedContact.includes('@')) {
             try {
                 await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -263,6 +266,7 @@ export class AuthService {
         } else {
             console.log(`\n\n=== [SMS MOCK] Telegram OTP for phone ${normalizedContact} is: ${otp} ===\n\n`);
         }
+        ----------------------------------- */
 
         return { success: true, message: 'OTP sent successfully.', isAdmin };
     }
