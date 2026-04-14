@@ -7,7 +7,6 @@ import { AdminLogin } from './features/auth/admin-login/admin-login';
 import { AdminLayout } from './core/layout/admin-layout/admin-layout';
 import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
 import { AdminKnowledgeBase } from './features/admin/admin-knowledge-base/admin-knowledge-base';
-import { AdminApiHub } from './features/admin/admin-api-hub/admin-api-hub';
 import { AdminCompanies } from './features/admin/admin-companies/admin-companies';
 import { AdminSchemes } from './features/admin/admin-schemes/admin-schemes';
 import { AdminSchemeTenants } from './features/admin/admin-scheme-tenants/admin-scheme-tenants';
@@ -30,7 +29,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: AdminDashboard },
       { path: 'knowledge-base', component: AdminKnowledgeBase },
-      { path: 'api-hub', component: AdminApiHub },
       { path: 'companies', component: AdminCompanies },
       { path: 'communities', component: AdminSchemes },
       { path: 'communities/:id/tenants', component: AdminSchemeTenants }

@@ -1,7 +1,7 @@
 <div class="dashboard-header">
   <div class="title-area">
-    <h1>Companies Management</h1>
-    <p>Manually load and track property management companies</p>
+    <h1>Property Management Companies</h1>
+    <p>Manage PM Companies and their SmartBuilding APIs</p>
   </div>
   <div class="flex gap-4 items-center animate-fade-up" style="animation-delay: 0.1s">
     <div class="relative">
@@ -12,61 +12,135 @@
   </div>
 </div>
 
-<div class="companies-grid animate-fade-up" style="animation-delay: 0.2s">
-<div class="table-container content-card mt-6">
+<div class="schemes-grid animate-fade-up api-hub-page" style="animation-delay: 0.2s">
+  <div class="table-container content-card mt-6">
     @if (isLoading) {
       <div class="loading-state">Loading companies...</div>
     } @else if (companies.length > 0) {
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Company Name</th>
-            <th>Contact Person</th>
-            <th>Phone / Email</th>
-            <th>Status</th>
-            <th>Created Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (company of companies; track company.id) {
-            <tr>
-              <td class="font-medium">
-                <div>{{ company.name }}</div>
-                <div class="text-xs text-secondary font-normal mt-1">{{ company.address || 'No address recorded' }}</div>
-              </td>
-              <td>{{ company.main_contact_person || 'Not set' }}</td>
-              <td>
-                <div class="text-sm font-medium">{{ company.contact_number || '-' }}</div>
-                <div class="text-xs text-secondary mt-1">
-                  @if (company.email) {
-                    <a [href]="'mailto:' + company.email" class="text-blue-500 hover:underline">{{ company.email }}</a>
-                  } @else {
-                    <span>-</span>
-                  }
-                </div>
-              </td>
-              <td>
-                <span class="badge" [class.badge-success]="company.status === 'active'" [class.badge-secondary]="company.status !== 'active'">
-                  {{ company.status | titlecase }}
+      <div class="integrations-list mt-4">
+        
+        <div class="integration-card" *ngFor="let c of companies" [class.expanded]="expandedId === c.id">
+          <!-- Card Header -->
+          <div class="card-top">
+            <div class="card-info">
+              <div class="card-title-row">
+                <h3>{{ c.name }}</h3>
+                <span class="badge" [class.badge-primary]="c.status === 'active'" [class.badge-default]="c.status !== 'active'">{{ c.status | titlecase }}</span>
+                <span class="badge" *ngIf="c.integration" [ngClass]="statusClass(c.integration.sync_status)">
+                    API: {{ statusLabel(c.integration.sync_status) }}
                 </span>
-              </td>
-              <td class="text-secondary">{{ company.created_at | date:'mediumDate' }}</td>
-              <td>
-                <div class="flex gap-2">
-                  <button class="btn-icon hover:bg-gray-100 p-1 rounded" (click)="openEditModal(company)" title="Edit">✏️</button>
-                  <button class="btn-icon hover:bg-red-50 p-1 rounded text-red-500" (click)="deleteCompany(company.id)" title="Delete">🗑️</button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+                <span class="badge badge-default" *ngIf="!c.integration">No API</span>
+              </div>
+              <div class="card-meta">
+                <span *ngIf="c.main_contact_person">Contact: <strong>{{ c.main_contact_person }}</strong></span>
+                <span *ngIf="c.email">Email: <strong>{{ c.email }}</strong></span>
+                <!-- API details if integration exists -->
+                <ng-container *ngIf="c.integration">
+                    <span>Brand: <strong>{{ c.integration.brand_id }}</strong></span>
+                    <span *ngIf="c.integration.community_id">Community ID: <strong>{{ c.integration.community_id }}</strong></span>
+                    <span class="last-sync" *ngIf="c.integration.last_synced_at">Last sync: {{ formatDate(c.integration.last_synced_at) }}</span>
+                    <span class="last-sync muted" *ngIf="!c.integration.last_synced_at">Never synced</span>
+                </ng-container>
+              </div>
+              <div class="sync-error" *ngIf="c.integration?.sync_error">
+                ⚠️ {{ c.integration.sync_error }}
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="action-btn" *ngIf="c.integration" [disabled]="testingId === c.integration.id" (click)="testConnectionCard(c.integration.id, $event)" title="Test connection">
+                {{ testingId === c.integration?.id ? '⏳' : '⚡' }}
+              </button>
+              <button class="action-btn" *ngIf="c.integration" [disabled]="syncingId === c.integration.id" (click)="triggerSync(c.integration.id, $event)" title="Sync now">
+                <span [class.spinning]="syncingId === c.integration.id">🔄</span>
+              </button>
+              <button class="action-btn" (click)="openEditModal(c)" title="Edit">✏️</button>
+              <button class="action-btn danger" (click)="deleteCompany(c.id)" title="Delete">🗑️</button>
+              <button class="expand-btn" *ngIf="c.integration" (click)="toggleExpand(c.id)">
+                {{ expandedId === c.id ? '▲ Data' : '▼ Data' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Expanded Data Proxy Panel -->
+          <div class="card-expand" *ngIf="expandedId === c.id && c.integration">
+            <!-- Sync Stats -->
+            <div class="sync-stats" *ngIf="syncSummary[c.integration.id]">
+              <div class="stat-item">
+                <span class="stat-label">Properties</span>
+                <span class="stat-val local">{{ syncSummary[c.integration.id].local?.properties ?? '—' }}</span>
+                <span class="stat-divider">/</span>
+                <span class="stat-val remote">{{ syncSummary[c.integration.id].remote?.properties ?? '—' }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Units</span>
+                <span class="stat-val local">{{ syncSummary[c.integration.id].local?.property_units ?? '—' }}</span>
+                <span class="stat-divider">/</span>
+                <span class="stat-val remote">{{ syncSummary[c.integration.id].remote?.property_units ?? '—' }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Tenants</span>
+                <span class="stat-val local">{{ syncSummary[c.integration.id].local?.tenants ?? '—' }}</span>
+                <span class="stat-divider">/</span>
+                <span class="stat-val remote">{{ syncSummary[c.integration.id].remote?.tenants ?? '—' }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Owners</span>
+                <span class="stat-val local">{{ syncSummary[c.integration.id].local?.landlords ?? '—' }}</span>
+                <span class="stat-divider">/</span>
+                <span class="stat-val remote">{{ syncSummary[c.integration.id].remote?.landlords ?? '—' }}</span>
+              </div>
+              <div class="stat-note">Local / Remote Database Synchronisation</div>
+            </div>
+
+            <div class="proxy-loading" *ngIf="syncSummaryLoading[c.integration.id]">
+              <div class="spinner"></div> Loading sync data…
+            </div>
+
+            <!-- Tabs -->
+            <div class="data-tabs">
+              <button [class.active]="activeTab === 'tenants'"    (click)="selectTab('tenants')">Tenants</button>
+              <button [class.active]="activeTab === 'properties'" (click)="selectTab('properties')">Properties</button>
+              <button [class.active]="activeTab === 'owners'"     (click)="selectTab('owners')">Owners</button>
+            </div>
+
+            <!-- Proxy Data Results -->
+            <div class="proxy-search" *ngIf="activeTab === 'tenants'">
+              <input type="text" class="input-base" placeholder="Search tenants…"
+                     [(ngModel)]="proxySearch"
+                     (input)="loadProxyData(c.integration.id, activeTab)" />
+            </div>
+
+            <div class="proxy-loading" *ngIf="proxyLoading">
+              <div class="spinner"></div> Loading…
+            </div>
+
+            <div class="proxy-table-wrap" *ngIf="!proxyLoading">
+              <table class="proxy-table" *ngIf="proxyData.length > 0">
+                <thead>
+                  <tr>
+                    <th *ngFor="let k of tableKeys">{{ k.replace('_', ' ') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of proxyData">
+                    <td *ngFor="let k of tableKeys">{{ row[k] ?? '—' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="no-data" *ngIf="proxyData.length === 0">
+                No data available — try triggering a sync first.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     } @else {
       <div class="empty-state">
         <div class="empty-icon">🏢</div>
         <h3>No Companies Loaded</h3>
-        <p>Manually add companies here so property managers can load their communities.</p>
+        <p>Manually add companies to the database to begin assigning properties to them.</p>
       </div>
     }
   </div>
@@ -74,38 +148,93 @@
 
 @if (showAddModal) {
   <div class="modal-backdrop" (click)="closeModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content" style="max-width: 600px;" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h2>{{ isEditing ? 'Edit' : 'Add New' }} Company</h2>
         <button class="close-btn" (click)="closeModal()">×</button>
       </div>
       <div class="modal-body form-group">
+        <!-- Core Company Settings -->
         <label>Company Name</label>
-        <input type="text" [(ngModel)]="newCompany.name" placeholder="e.g. Renprop" class="form-input" />
+        <input type="text" [(ngModel)]="newCompany.name" placeholder="e.g. Acme Property Management" class="form-input" />
+  
+        <div class="grid grid-cols-2 gap-4 mt-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+          <div>
+            <label>Main Contact Person</label>
+            <input type="text" [(ngModel)]="newCompany.main_contact_person" placeholder="John Doe" class="form-input" />
+          </div>
+          <div>
+            <label>Contact Number</label>
+            <input type="tel" [(ngModel)]="newCompany.contact_number" placeholder="+27 82 123 4567" class="form-input" />
+          </div>
+        </div>
         
-        <label class="mt-4">Main Contact Person</label>
-        <input type="text" [(ngModel)]="newCompany.main_contact_person" placeholder="John Doe" class="form-input" />
-  
-        <label class="mt-4">Contact Email</label>
-        <input type="email" [(ngModel)]="newCompany.email" placeholder="contact@company.com" class="form-input" />
-  
-        <label class="mt-4">Contact Number</label>
-        <input type="text" [(ngModel)]="newCompany.contact_number" placeholder="+27 00 000 0000" class="form-input" />
-  
-        <label class="mt-4">Address</label>
-        <input type="text" [(ngModel)]="newCompany.address" placeholder="123 Main St..." class="form-input" />
-  
-        <label class="mt-4">Status</label>
-        <select [(ngModel)]="newCompany.status" class="form-input">
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
+        <label class="mt-4">Email Address</label>
+        <input type="email" [(ngModel)]="newCompany.email" placeholder="contact@acme.com" class="form-input" />
+
+        <label class="mt-4">Physical Address</label>
+        <input type="text" [(ngModel)]="newCompany.address" placeholder="123 Office Block, Region" class="form-input" />
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-light);" />
+
+        <!-- API Settings -->
+        <div style="background: rgba(56, 163, 200, 0.04); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; font-size: 1rem;">SmartBuilding / MDA API Connection</h3>
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin: 0;">
+                    <input type="checkbox" [(ngModel)]="integrationForm.enabled" />
+                    <strong>Enable API</strong>
+                </label>
+            </div>
+
+            <ng-container *ngIf="integrationForm.enabled">
+                <div class="grid grid-cols-2 gap-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>Brand ID <span style="color:red">*</span></label>
+                        <input type="text" [(ngModel)]="integrationForm.brand_id" placeholder="e.g. sm" class="form-input" />
+                    </div>
+                    <div>
+                        <label>Client ID <span style="color:red">*</span></label>
+                        <input type="text" [(ngModel)]="integrationForm.client_id" placeholder="API Client ID" class="form-input" />
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label>Client Secret <span style="color:red" *ngIf="!integrationForm.id">*</span> <span style="font-weight: 400; font-size: 0.8rem; color: #888;" *ngIf="integrationForm.id">(leave blank to keep existing)</span></label>
+                    <input type="password" [(ngModel)]="integrationForm.clientSecretNew" [placeholder]="integrationForm.id ? '***configured***' : 'Enter client secret'" class="form-input" />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mt-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>SmartBuilding Community ID</label>
+                        <input type="number" [(ngModel)]="integrationForm.community_id" placeholder="e.g. 5132" class="form-input" />
+                    </div>
+                    <div>
+                        <label>MDA DB Identifier</label>
+                        <input type="text" [(ngModel)]="integrationForm.db_identifier" placeholder="GUID" class="form-input" />
+                    </div>
+                </div>
+            </ng-container>
+            
+            <div class="test-result success" style="margin-top: 1rem;" *ngIf="integrationForm.enabled && testResult && testResult.success">{{ testResult.message }}</div>
+            <div class="test-result error"   style="margin-top: 1rem;" *ngIf="integrationForm.enabled && testResult && !testResult.success">{{ testResult.message }}</div>
+        </div>
+
+        <div class="drawer-error mt-4" *ngIf="drawerError">⚠️ {{ drawerError }}</div>
+
       </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" (click)="closeModal()">Cancel</button>
-        <button class="btn-primary" (click)="saveCompany()" [disabled]="!newCompany.name">
-          {{ isEditing ? 'Save Changes' : 'Save Company' }}
-        </button>
+      <div class="modal-footer" style="padding-top: 1rem; border-top: 1px solid var(--border-light); justify-content: space-between;">
+        <div>
+            <button class="btn-secondary" style="border-color: transparent;" *ngIf="integrationForm.id && integrationForm.enabled" [disabled]="drawerLoading" (click)="testConnectionModal()">
+                {{ drawerLoading && !testResult ? 'Testing...' : '⚡ Test API' }}
+            </button>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <button class="btn-secondary" (click)="closeModal()">Cancel</button>
+            <button class="btn-primary" (click)="saveCompany()" [disabled]="!newCompany.name || (integrationForm.enabled && (!integrationForm.brand_id || !integrationForm.client_id))">
+              {{ drawerLoading && !testResult ? 'Saving...' : (isEditing ? 'Save Changes' : 'Save Company') }}
+            </button>
+        </div>
       </div>
     </div>
   </div>
