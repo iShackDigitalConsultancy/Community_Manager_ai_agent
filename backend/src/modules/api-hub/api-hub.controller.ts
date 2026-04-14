@@ -27,6 +27,7 @@ export const apiHubController = {
     async create(req: Request, res: Response) {
         try {
             const { companyId, provider, brandId, clientId, clientSecret, communityId, dbIdentifier } = req.body;
+            console.log('API_HUB POST payload:', req.body);
             if (!companyId || !brandId || !clientId || !clientSecret) {
                 return res.status(400).json({ error: 'companyId, brandId, clientId and clientSecret are required' });
             }
