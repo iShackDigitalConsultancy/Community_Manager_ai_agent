@@ -1,24 +1,29 @@
 -- MIGRATION: 013_api_hub_company_link.sql
 
--- 1. Add company_id to api_integrations
 ALTER TABLE api_integrations ADD COLUMN IF NOT EXISTS company_id UUID REFERENCES companies(id) ON DELETE CASCADE;
 
--- 2. Migrate existing integrations by creating companies if they don't exist
-INSERT INTO companies (name, status)
-SELECT DISTINCT ai.company_name, 'active'
-FROM api_integrations ai
-WHERE NOT EXISTS (SELECT 1 FROM companies c WHERE c.name = ai.company_name)
-  AND ai.company_name IS NOT NULL;
+DO $$ 
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='api_integrations' AND column_name='company_name') THEN
+        EXECUTE '
+        INSERT INTO companies (name, status)
+        SELECT DISTINCT ai.company_name, ''active''
+        FROM api_integrations ai
+        WHERE NOT EXISTS (SELECT 1 FROM companies c WHERE c.name = ai.company_name)
+          AND ai.company_name IS NOT NULL;
+        ';
 
--- Link them
-UPDATE api_integrations ai
-SET company_id = c.id
-FROM companies c
-WHERE ai.company_name = c.name;
+        EXECUTE '
+        UPDATE api_integrations ai
+        SET company_id = c.id
+        FROM companies c
+        WHERE ai.company_name = c.name;
+        ';
 
--- 3. Enforce constraint and drop old column
-ALTER TABLE api_integrations ALTER COLUMN company_id SET NOT NULL;
-ALTER TABLE api_integrations DROP COLUMN IF EXISTS company_name;
+        EXECUTE 'ALTER TABLE api_integrations ALTER COLUMN company_id SET NOT NULL';
+        EXECUTE 'ALTER TABLE api_integrations DROP COLUMN company_name';
+    END IF;
+END $$;
 
 -- 4. Create an index
 CREATE INDEX IF NOT EXISTS idx_api_integrations_company ON api_integrations(company_id);

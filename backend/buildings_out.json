@@ -1,0 +1,1937 @@
+{
+  "data": [
+    {
+      "building_id": 1593,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Wild Fig Business Park",
+      "building_type": "Offices",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": "117",
+      "building_description": null,
+      "building_address": "Wild Fig Business Park, 1494 Cranberry Street, Honeydew, Johannesburg, 2170",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "7129.83",
+      "building_municipal_account": null,
+      "building_lettable_area": "7129.83",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Alicia Mullany",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:49.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "3",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 3,
+      "building_settings": null,
+      "building_meta_enquiry_number": 3,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 1,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1592,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Honeydew Business Park",
+      "building_type": "Industrial",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": null,
+      "building_description": null,
+      "building_address": "Honeydew Business Park, 1503 Citrus Street, Honeydew, Johannesburg, 2170",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "14412.3",
+      "building_municipal_account": null,
+      "building_lettable_area": "14412.3",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Alicia Mullany",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:48.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "29",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 29,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 2,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1591,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Wilge Business Park",
+      "building_type": "Industrial",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": null,
+      "building_description": null,
+      "building_address": "Wilge Business Park, Cnr of Ridge and Braam Roads, Honeydew, Johannesburg, 2170",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "12338.74",
+      "building_municipal_account": null,
+      "building_lettable_area": "12338.74",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Alicia Mullany",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:47.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "30",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 30,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 3,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1590,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Stormill Ext. 5",
+      "building_type": "Industrial",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": null,
+      "building_description": null,
+      "building_address": "Stormill Ext. 5, 20 Hoefyster Street, Johannesburg, 1709",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "8896",
+      "building_municipal_account": null,
+      "building_lettable_area": "8896",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Adri Ekkerd",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:45.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "33",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 33,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 4,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1589,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Kiepersol Park Portion 56 of Erf 205",
+      "building_type": "Industrial",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": "Portion 56 of erf 205",
+      "building_description": null,
+      "building_address": "1 Kiepersol Crescent, Western Cape, 7441",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "5588",
+      "building_municipal_account": null,
+      "building_lettable_area": "5588",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Adri Ekkerd",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:44.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "37",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 37,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 5,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1588,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Atlantic Hills Erf 90",
+      "building_type": "Industrial",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": "524",
+      "building_description": null,
+      "building_address": "Portion 2 of Erf 52, Western Cape, 7446",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "0",
+      "building_municipal_account": null,
+      "building_lettable_area": "0",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Adri Ekkerd",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:43.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "38",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 38,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 6,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1587,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Malmesbury HQ Erf 897",
+      "building_type": "Industrial",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": "897",
+      "building_description": null,
+      "building_address": "8 Hoogstraat, Western Cape, 7300",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "1010.5",
+      "building_municipal_account": null,
+      "building_lettable_area": "1010.5",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Adri Ekkerd",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:43.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "39",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 39,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 7,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1586,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Malmesbury Schoonspruit Erf 10428",
+      "building_type": "Vacant land",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": "10428",
+      "building_description": null,
+      "building_address": "2 Vergenoeg Singel, Western Cape, 7300",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "1785",
+      "building_municipal_account": null,
+      "building_lettable_area": "1785",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Adri Ekkerd",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:42.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "40",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 40,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 8,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1585,
+      "building_community_id": 168,
+      "building_brand_id": 1,
+      "building_name": "Rainbow Park Erf 39273",
+      "building_type": "Industrial",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": "39273",
+      "building_description": null,
+      "building_address": "9 Rainbow Close, Western Cape, 7441",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": null,
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "7465.4",
+      "building_municipal_account": null,
+      "building_lettable_area": "7465.4",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "Adri Ekkerd",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": null,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T14:10:40.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "45",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 45,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 9,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    {
+      "building_id": 1584,
+      "building_community_id": 131,
+      "building_brand_id": 1,
+      "building_name": "ZALENI BODY CORPORATE",
+      "building_type": "BODY CORPORATE",
+      "building_logo": null,
+      "building_longitude": null,
+      "building_latitude": null,
+      "building_erf_number": null,
+      "building_description": null,
+      "building_address": "17 THE STRAIGHT AVENUE, PINE SLOPES AH, JOHANNESBURG, 2194",
+      "building_is_visible": 1,
+      "building_is_private": 0,
+      "building_project_name": null,
+      "building_practical_completion": "2026-02-28",
+      "building_patent_defect_expiry": null,
+      "building_latent_defect_expiry": null,
+      "building_lease_commencement": null,
+      "building_lease_anniversary": null,
+      "building_lease_termination": null,
+      "building_building_zone": null,
+      "building_site_area": "5727",
+      "building_municipal_account": null,
+      "building_lettable_area": "5727",
+      "building_water_meter_number": null,
+      "building_electric_meter_number": null,
+      "building_administrator": "FRITS KUNI-ERASMUS",
+      "building_account_details": null,
+      "building_account_number": null,
+      "building_financial_year_end": 8,
+      "building_status": 1,
+      "building_created_date": "2026-04-01T13:48:55.000Z",
+      "building_created_by": 1,
+      "building_ref_id": "162",
+      "building_ref_type": "MDA",
+      "building_ref_other_id": null,
+      "building_mri_ref_id": 162,
+      "building_settings": null,
+      "building_meta_enquiry_number": 0,
+      "building_gla": "0",
+      "brand_id": 1,
+      "brand_key": "sm",
+      "brand_name": "Smart Building",
+      "brand_phone_number": ".",
+      "brand_fax_number": ".",
+      "brand_email": "contact@smartbuildingapp.com",
+      "brand_logo": "1686572118686.jpg",
+      "brand_app_link_android": null,
+      "brand_app_link_apple": null,
+      "brand_created_date": "2022-09-02T06:29:08.000Z",
+      "brand_fcm_key": "AAAAFKhPRXQ:APA91bH4yQkyKRxFk1eHJVTq45cu2P8IQcHMIJKkDMthXHFKbYnPIt9TK5b_644Xng6eCWnH1yvlRmqKCgSDZU2cdcPnFq2s5K2OyWBs4sJnv86QTMsacGRMPnViry5vuDUnyuCf-xxY",
+      "brand_features": [
+        {
+          "key": "smart-search",
+          "isActivated": true
+        },
+        {
+          "key": "ai-chat",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries",
+          "isActivated": true
+        },
+        {
+          "key": "announcements",
+          "isActivated": true
+        },
+        {
+          "key": "building-assets",
+          "isActivated": true
+        },
+        {
+          "key": "building-documents",
+          "isActivated": true
+        },
+        {
+          "key": "building-tasks",
+          "isActivated": true
+        },
+        {
+          "key": "building-leases",
+          "isActivated": true
+        },
+        {
+          "key": "building-emr",
+          "isActivated": true
+        },
+        {
+          "key": "building-reports",
+          "isActivated": true
+        },
+        {
+          "key": "building-faculty",
+          "isActivated": true
+        },
+        {
+          "key": "building-billings",
+          "isActivated": true
+        },
+        {
+          "key": "building-budget",
+          "isActivated": true
+        },
+        {
+          "key": "procurement",
+          "isActivated": true
+        },
+        {
+          "key": "inspection-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "csos-compliance-checklist",
+          "isActivated": true
+        },
+        {
+          "key": "enquiries-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assets-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "financial-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "emailer",
+          "isActivated": true
+        },
+        {
+          "key": "iprop-dashboard",
+          "isActivated": true
+        },
+        {
+          "key": "assistant",
+          "isActivated": true
+        },
+        {
+          "key": "building_profile",
+          "isActivated": true
+        },
+        {
+          "key": "report-incidents",
+          "isActivated": true
+        },
+        {
+          "key": "call-directory",
+          "isActivated": true
+        },
+        {
+          "key": "bulletin-board",
+          "isActivated": true
+        },
+        {
+          "key": "my-jobs",
+          "isActivated": true
+        },
+        {
+          "key": "documents",
+          "isActivated": true
+        },
+        {
+          "key": "contacts",
+          "isActivated": true
+        },
+        {
+          "key": "assets",
+          "isActivated": true
+        },
+        {
+          "key": "inspections",
+          "isActivated": true
+        },
+        {
+          "key": "tasks",
+          "isActivated": true
+        }
+      ],
+      "running_number": 10,
+      "userAccess": {
+        "isManager": false,
+        "isLandlord": false,
+        "isTenant": false,
+        "isServiceProvider": false,
+        "isServiceProviderAssigned": false,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  ],
+  "communityData": null,
+  "recordsTotal": 459,
+  "recordsFiltered": 459
+}
