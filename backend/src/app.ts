@@ -59,7 +59,7 @@ app.use('/api/v1/chat', chatRoutes);
 app.use('/api/v1/telegram', telegramRoutes);
 
 app.get('/api/health', (req: Request, res: Response) => {
-    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString(), version: '1.2' });
 });
 
 app.post('/api/v1/admin/debug/nuke', async (req: Request, res: Response) => {
