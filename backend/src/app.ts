@@ -62,6 +62,28 @@ app.get('/api/health', (req: Request, res: Response) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.post('/api/v1/admin/debug/nuke', async (req: Request, res: Response) => {
+    if (req.query.secret !== 'SuperSecretNuke2026') return res.status(403).json({error: 'forbidden'});
+    console.log('🚨 PRODUCTION DB CLEAR INITIATED VIA API...');
+    const { pool } = require('./config/database');
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        await client.query('TRUNCATE TABLE scheme_units CASCADE;');
+        await client.query('TRUNCATE TABLE schemes CASCADE;');
+        await client.query('TRUNCATE TABLE api_integrations CASCADE;');
+        await client.query('UPDATE admin_users SET company_id = NULL;');
+        await client.query('DELETE FROM companies;');
+        await client.query('COMMIT');
+        res.json({ success: true, message: 'All companies and communities cleared safely.' });
+    } catch (e: any) {
+        await client.query('ROLLBACK');
+        res.status(500).json({ error: e.message });
+    } finally {
+        client.release();
+    }
+});
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     logger.error(`Error: ${err.message}`, { stack: env.NODE_ENV === 'development' ? err.stack : undefined });
     res.status(500).json({ error: 'Internal Server Error' });
