@@ -20,6 +20,6 @@ WHERE ai.company_name = c.name;
 ALTER TABLE api_integrations ALTER COLUMN company_id SET NOT NULL;
 ALTER TABLE api_integrations DROP COLUMN IF EXISTS company_name;
 
--- 4. Create an index and a unique constraint for 1 provider per company
+-- 4. Create an index
 CREATE INDEX IF NOT EXISTS idx_api_integrations_company ON api_integrations(company_id);
-ALTER TABLE api_integrations ADD CONSTRAINT uq_api_integrations_company_provider UNIQUE (company_id, provider);
+-- Note: We do NOT enforce UNIQUE (company_id, provider) because a PM Company might have multiple disjoint profiles (e.g., separate SmartBuilding community IDs).
