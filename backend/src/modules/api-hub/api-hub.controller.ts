@@ -28,11 +28,11 @@ export const apiHubController = {
         try {
             const { companyId, provider, brandId, clientId, clientSecret, communityId, dbIdentifier } = req.body;
             console.log('API_HUB POST payload:', req.body);
-            if (!companyId || !brandId || !clientId || !clientSecret) {
-                return res.status(400).json({ error: 'companyId, brandId, clientId and clientSecret are required' });
+            if (!companyId || !brandId || !clientId) {
+                return res.status(400).json({ error: 'companyId, brandId, and clientId are required' });
             }
             res.status(201).json(await apiHubService.createIntegration(
-                { companyId, provider, brandId, clientId, clientSecret, communityId, dbIdentifier }
+                { companyId, provider, brandId, clientId, clientSecret: clientSecret || '', communityId, dbIdentifier }
             ));
         } catch (e: any) { handleError(res, e); }
     },
