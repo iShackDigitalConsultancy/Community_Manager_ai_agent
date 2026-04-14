@@ -184,7 +184,8 @@ export class AdminCompanies implements OnInit {
                 },
                 error: (err) => {
                     this.drawerLoading = false;
-                    this.drawerError = 'Company saved, but integration failed: ' + (err.error?.error || 'Unknown error');
+                    this.drawerError = 'Company saved, but integration failed: ' + (err.error?.error || err.message || 'Unknown error');
+                    this.cd.detectChanges();
                 }
             });
         } else {
@@ -212,7 +213,8 @@ export class AdminCompanies implements OnInit {
       },
       error: (err) => {
         this.drawerLoading = false;
-        this.drawerError = err.error?.error || 'Failed to save company';
+        this.drawerError = err.error?.error || err.message || 'Failed to save company';
+        this.cd.detectChanges();
       }
     });
   }
